@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>UploaderApp.API</name>
+    </assembly>
+    <members>
+        <member name="M:UploaderApp.API.Controllers.LicensingController.GetDocInfo(System.String)">
+            <summary>
+            Retrieves the specified Document using the unique emaillinkid
+            </summary>
+            <param name="emaillink"></param> 
+        </member>
+        <member name="M:UploaderApp.API.Controllers.LicensingController.UpdateDateViewed(System.Int32)">
+            <summary>
+            view-doc/{id} updates the date viewed field
+            </summary>
+            <param name="id"></param>
+            <returns>Ok</returns>
+        </member>
+        <member name="M:UploaderApp.API.Controllers.LicensingController.ConfirmReceipt(System.Int32)">
+            <summary>
+            confirm-doc/{id} updates the date confirmed field, and sends a confirmation email to the end user
+            </summary>
+            <param name="id"></param>
+            <returns>Ok</returns>
+        </member>
+        <member name="M:UploaderApp.API.Controllers.LicensingController.GetReport(UploaderApp.API.Helpers.ReportParams,System.String)">
+            <summary>
+            Get report based on ReportParams and filter/ search 
+            </summary>
+            <param name="rptParams"></param>
+            <param name="filter"></param>
+            <returns>PagedList of DocumentInfo</returns>
+        </member>
+        <member name="M:UploaderApp.API.Controllers.LicensingController.Post(UploaderApp.API.Models.DocumentInfo)">
+            <summary>
+            Create new record in database and send initial email to end user
+            </summary>
+            <param name="doc"></param>
+            <returns>DocInfo object</returns>
+        </member>
+        <member name="M:UploaderApp.API.Controllers.LicensingController.Post(System.Int32)">
+            <summary>
+            Resend link to end user updates dateResent and (re)sends an email to end user
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:UploaderApp.API.Controllers.LicensingController.GetEmailLink(System.String)">
+            <summary>
+            Internal GET call to support POST return 
+            </summary>
+            <param name="emaillink"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

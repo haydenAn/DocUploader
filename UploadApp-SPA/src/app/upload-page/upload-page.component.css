@@ -1,0 +1,26 @@
+.nv-file-over { 
+    border: dotted 3px red;
+}
+.upload-page{
+    padding: 20px;
+    margin:  0 auto;
+    max-width: 700px;
+}
+.upload-page > section{
+    margin-bottom: 40px !important;
+}
+.my-drop-zone{
+    height: 150px;
+
+}
+.my-drop-zone > span{
+    position: relative;
+    top: 40%;
+}
+.file-input{
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+.file-input > button{
+    cursor: pointer;
+}

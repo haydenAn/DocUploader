@@ -1,0 +1,33 @@
+<div class="container">  
+        <div class="form-group mt-1">
+          <label>Filter</label>
+            <label class="checkbox-inline mt-2">
+              <input type="radio" class="ml-4" id="sent" name="filter" value="sent" [(ngModel)]="sent" (change)="onCheckboxChange('Sent', $event.target.checked)">Sent
+            </label>
+            <label class="checkbox-inline">
+              <input type="radio" class="ml-4" id="resent" name="filter" value="resent" [(ngModel)]="resent" (change)="onCheckboxChange('Resent', $event.target.checked)">Resent
+            </label>
+            <label class="checkbox-inline">
+              <input type="radio" class="ml-4" id="viewed" name="filter" value="viewed" [(ngModel)]="viewed" (change)="onCheckboxChange('Viewed', $event.target.checked)">Viewed
+            </label>
+            <label class="checkbox-inline">
+              <input type="radio" class="ml-4" id="agreed" name="filter" value="agreedsent" [(ngModel)]="agreed" (change)="onCheckboxChange('Agreed', $event.target.checked)">Agreed
+            </label>
+
+  <div class="row float-right mt-1">
+    <form class="form-inline " #passwordForm="ngForm" (ngSubmit)="searchReport()">
+      <!-- <div class="btn-group">
+        <input id="searchinput" class="form-control mr-sm-2" type="search" class="form-control" placeholder="Search" required >
+        <a class="clear" (click)="clearSearch()">
+          <span id="searchclear" class="glyphicon glyphicon-remove-circle" ></span>
+        </a>        
+      </div> -->
+      <input class="form-control mr-sm-2" type="text" id="search" name="search" placeholder="Search" required
+        [(ngModel)]="search">
+      <button class="btn btn-success ml-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <button class="btn btn-warning ml-4 my-sm-0" *ngIf="anythingOn()"
+      (click)="clearFilters()"><span class="fa fa-ban"></span> Clear filter and search
+    </button>
+  </div>
+</div>

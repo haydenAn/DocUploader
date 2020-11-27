@@ -1,0 +1,45 @@
+<!-- <div class="container mt-3">  
+  <ng2-smart-table [settings]="settings" [source]="data"></ng2-smart-table>
+</div> -->
+<app-nav></app-nav>
+<app-search 
+  (sendSearch)="newSearch($event)" 
+   ></app-search>
+
+<ngx-spinner></ngx-spinner>
+<div class="container-fluid mt-3">
+
+  <table class="table table-striped">
+    <thead>
+      <tr class="d-flex">
+        <th class="col-2">First Name</th>
+        <th class="col-3">Last Name</th>
+        <th class="col-3">Company</th>
+        <th class="col-1">Status</th>
+        <th class="col-2">Last Date update</th>
+        <th class="col-1">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data2" class="d-flex">
+        <td class="col-2">{{ item.firstName }}</td>
+        <td class="col-3">{{ item.lastName }}</td>
+        <td class="col-3">{{ item.company }}</td>
+        <td class="col-1">{{ item.status }}</td>
+        <td class="col-2">{{ item.lastActionDate | date }}</td>
+        <td class="col-1" *ngIf="item.status==='Sent'">
+          <button type="button" class="btn btn-success" (click)="resendLink(item.id)">Resend</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<div class="d-flex justify-content-center">
+  <pagination [boundaryLinks]="true" [totalItems]="pagination?.totalItems" [itemsPerPage]="pagination?.itemsPerPage"
+    [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;" nextText="&rsaquo;"
+    firstText="&laquo;" lastText="&raquo;">
+  </pagination>
+</div>
+<ngx-spinner></ngx-spinner>

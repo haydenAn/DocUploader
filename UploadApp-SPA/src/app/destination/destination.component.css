@@ -1,0 +1,11 @@
+.header{
+   top: 0;
+    z-index: 100;
+}
+.footer{
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 2rem;
+    width: 100%;
+    text-align: center;
+}

@@ -1,0 +1,118 @@
+<app-nav></app-nav>
+<ngx-spinner></ngx-spinner>
+
+<div class="upload-page">
+  <section class="form">
+    <form [formGroup]="userEmails" class="needs-validation cc_cursor info-form" novalidate="" _lpchecked="1">
+      <h3>Recipient Information</h3>
+      <div class="row">
+        <div class="col-md-6 mb-3 cc_cursor">
+          <label for="firstName">First name</label>
+          <input type="text" class="form-control cc_cursor" id="firstName" placeholder="" value="" required="" #firstName
+            formControlName="firstname" />
+          <div class="invalid-feedback">
+            Valid first name is required.
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="lastName">Last name</label>
+          <input type="text" class="form-control" id="lastName" placeholder="" value="" required=""
+            formControlName="lastname" />
+          <div class="invalid-feedback">
+            Valid last name is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3 cc_cursor">
+          <label for="company">Company</label>
+          <input type="text" class="form-control" id="company" placeholder="" value="FiveStar" required="" formControlName="company" />
+          <div class="invalid-feedback">
+            Company is required.
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="title">Title</label>
+          <input type="text" class="form-control" id="title" placeholder="" value="CIO" required="" formControlName="title" />
+          <div class="invalid-feedback">
+            Title is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email">Email <span class="text-muted">(required)</span></label>
+        <input [class.is-invalid]="
+                userEmails.get('email').invalid && userEmails.get('email').touched
+              " type="email" class="form-control" id="email" placeholder="you@example.com" value="jmikalauskas@indxlogic.com" formControlName="email" />
+        <div class="invalid-feedback">
+          Please enter a valid email address.
+        </div>
+      </div>
+    </form> 
+  </section>
+
+  <section class="add-document mb-3">
+    <h4>Add Documents</h4>
+    <div ng2FileDrop [ngClass]="{ 'nv-file-over': hasBaseDropZoneOver }" (fileOver)="fileOverBase($event)" 
+      [uploader]="uploader" class="card bg-faded p-3 text-center my-drop-zone">
+      <i class="fa fa-upload fa-3x"></i>
+      <span>Drop Documents here</span>
+    </div>
+    <!-- Choose files area -->
+    <input class="file-input mt-2" type="file" ng2FileSelect [uploader]="uploader" multiple />
+  <!-- </section>
+
+  <section class="upload-queue mb-3"  > -->
+  <!-- *ngIf="uploader?.queue?.length"> -->
+
+    <h4>Upload queue</h4>
+    <!-- <p>Queue length: {{ uploader?.queue?.length }}</p> -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th >Name</th>
+          <th >Size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of uploader.queue">
+          <td>
+            <strong>{{ item?.file?.name }}</strong>
+          </td>
+          <td *ngIf="uploader.options.isHTML5" nowrap>
+            {{ item?.file?.size / 1024 / 1024 | number: ".2" }} MB
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- <div class="mb-3 queue">
+      <p>Queue progress:</p>
+      <div class="progress-bar" role="progressbar" [ngStyle]="{ width: uploader.progress + '%' }"></div>
+      
+      <ul class="action-list pull">
+        <button type="button" class="btn btn-success btn-s mr-3" (click)="uploader.uploadAll()"
+          [disabled]="!uploader.getNotUploadedItems().length">
+          <span class="fa fa-upload"></span> Upload
+        </button>
+        <button type="button" class="btn btn-warning btn-s mr-3" (click)="uploader.cancelAll()"
+          [disabled]="!uploader.isUploading">
+          <span class="fa fa-ban"></span> Cancel
+        </button>
+        <button type="button" class="btn btn-danger btn-s mr-3" (click)="uploader.clearQueue()"
+          [disabled]="!uploader.queue.length">
+          <span class="fa fa-trash"></span> Remove
+        </button>
+      </ul> 
+    </div> -->
+  </section>
+
+  <button type="button" class="btn btn-warning btn-s mr-3" (click)="initializeUploader($event)">
+    <span class="fa fa-ban"></span> Clear
+  </button>
+  <button type="button" class="btn btn-success btn-s mr-3" (click)="sendDocInfo($event)"
+    [disabled]="!uploader.queue.length">
+    <span class="fa fa-trash"></span> Send Email Link
+  </button>
+</div>

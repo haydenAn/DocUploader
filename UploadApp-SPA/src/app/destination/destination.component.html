@@ -1,0 +1,53 @@
+<div class="header d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <img class="my-0 mr-md-auto" src="assets/images/indxlogic.png" alt="image"> 
+</div>
+<div class="destination bg-light">  
+  <div class="container">
+    <div
+      class="header d-flex bg-white align-items-center p-3 my-3 rounded shadow-sm cc_cursor"
+    >
+      <div>
+        <h6 class="mb-0 lh-100 cc_cursor">Hi {{emaildoc.firstName}} {{emaildoc.lastName}},</h6>
+        <small>In order to make sure our customers have knowledge of, and access to, important legal documents we have
+          developed a secure document repository. 
+          These documents may include Quotations, MSAs, and BAAs and can be accessed via the link below. </small>
+      </div>
+    </div>
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+      <h6 class="border-bottom border-gray pb-2 mb-0">Documents</h6>
+      <div class="media text-muted pt-3"></div>
+      <div class="media text-muted pt-3">
+        <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">         
+          {{documentName}} <button type="button" class="btn btn-primary ml-3" (click)="view()">View</button>  
+        </p>
+      </div>     
+      <!-- <small class="d-block mt-3">
+        <a href="#">All Documents</a>
+      </small> -->
+      <br/>
+      <div class="media text-muted pt-3 mb-3">
+        <!-- <small>
+          <input type="checkbox" ng-model="received" (change)="onCheckboxChange($event.target.checked)" /> I have received, read and agree to all the documents
+          listed above, the IndxLogic Licenses and Master Sales Agreement<br /><br />
+        </small> -->
+        Please click on the green button to acknowledge viewing and receipt.
+      </div>
+      <!-- <p *ngIf="received">Check box has been checked</p>
+      <p *ngIf="!received">Check box is not checked</p>
+      <p *ngIf="viewed">Document has been viewed</p>
+      <p *ngIf="!viewed">Document has NOT been viewed</p> -->
+      <!-- <button type="button" [disabled]="!viewed || !received" class="btn btn-lg btn-block btn-success"          -->
+      <button type="button" [disabled]="!viewed" class="btn btn-lg btn-block btn-success"         
+          (click)="confirm()">I confirm receipt of the above documents</button>
+          <!-- [(ngModel)]="viewed"
+          ng-disabled="!viewed && !all" -->
+    </div>
+   
+  </div>
+</div>
+
+<footer class="footer">
+  <span>
+    If you have any questions please <a href = "mailto: mpendleton@indxlogic.com">click here</a>
+  </span>
+</footer>
