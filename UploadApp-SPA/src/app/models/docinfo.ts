@@ -1,5 +1,4 @@
 export class DocInfo {
-    id: number;
     firstname: string;
     lastname: string;
     emailaddress: string;

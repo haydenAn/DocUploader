@@ -90,6 +90,51 @@ export class UploadPageComponent implements OnInit {
 
   // this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 
+  storeDocInfo(){
+    const docInfo: DocInfo = {
+      documentfullname: '',
+      firstname: this.userEmails.get('firstname').value,
+      lastname: this.userEmails.get('lastname').value,
+      emailaddress: this.userEmails.get('email').value,
+      title: this.userEmails.get('title').value,
+      company: this.userEmails.get('company').value,
+      salesforceid: '101',
+      dateSent: new Date(),
+      dateViewed: new Date(),
+      dateAgreed: new Date(),
+      dateResent: new Date(),
+      description: '',
+      emaillinkid: ''
+    };
+    const files = [];
+    let docs = '';
+    console.log('uploader=');
+    this.uploader.queue.forEach(f => {
+      console.log(f.file.name);
+      files.push(f.file.name);
+      docs = docs + f.file.name + ';';
+    });
+    docInfo.documentfullname = 'C:\\users\\default.DESKTOP-GRQ62EF\\Pictures\\' + docs;
+    debugger;
+
+    this.spinner.show();
+    console.log(docInfo);
+    this.sendPostRequest(environment.apiUrl + 'api/docinfo', docInfo).subscribe(
+      response => {
+       // debugger;
+        this.notify.success('Saved and email sent');
+        console.log('Post call successful w response=' + response.emaillink);
+        this.clearFields();
+      },
+      error => {
+        console.log('Error during sendLink POST op', error);
+      }
+    );
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 1000);
+  }
+
   sendDocInfo() {
     const docInfo: DocInfo = {
       documentfullname: '',
@@ -99,7 +144,6 @@ export class UploadPageComponent implements OnInit {
       title: this.userEmails.get('title').value,
       company: this.userEmails.get('company').value,
       salesforceid: '101',
-      id: 0,
       dateSent: new Date(),
       dateViewed: new Date(),
       dateAgreed: new Date(),

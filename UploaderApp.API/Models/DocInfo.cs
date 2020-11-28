@@ -2,43 +2,53 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace UploaderApp.API.Models
 {
- 
-    public class DocumentInfo
+    public class DocInfoDbSettings : IDocInfoDbSettings
     {
-        public int Id { get; set; }
+        public string CollectionName { get; set; }
+        public string ConnectionString { get; set; }
+        public string DatabaseName { get; set; }
+    }
 
-        [Column(TypeName = "VARCHAR(250)")]
+    public interface IDocInfoDbSettings
+    {
+        string CollectionName { get; set; }
+        string ConnectionString { get; set; }
+        string DatabaseName { get; set; }
+    }
+    public class DocInfo
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+
         public string FirstName { get; set; }
 
-        [Column(TypeName = "VARCHAR(100)")]
         public string LastName { get; set; }
 
-        [Column(TypeName = "VARCHAR(200)")]
         public string EmailAddress { get; set; }
 
-        [Column(TypeName = "VARCHAR(100)")]
         public string Title { get; set; }
 
-        [Column(TypeName = "VARCHAR(100)")]
         public string Company { get; set; }
 
-        [Column(TypeName = "VARCHAR(50)")]
-        public int SalesforceId { get; set; }
+        public string SalesforceId { get; set; }
 
-        [Column(TypeName = "VARCHAR(300)")]
         public string DocumentFullName { get; set; }
+
         public string Description { get; set; }
 
-        [Column(TypeName = "VARCHAR(50)")]
-        public string UniqueLinkId { get; set; }
+        public int UniqueLinkId { get; set; }
+
         public DateTime dateSent { get; set; }
         public DateTime dateViewed { get; set; }
         public DateTime dateAgreed { get; set; }
         public DateTime dateResent { get; set; }
 
-        [Column(TypeName = "VARCHAR(20)")]
         public string Status { get; set; }
     }
 }

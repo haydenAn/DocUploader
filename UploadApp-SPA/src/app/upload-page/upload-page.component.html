@@ -115,4 +115,9 @@
     [disabled]="!uploader.queue.length">
     <span class="fa fa-trash"></span> Send Email Link
   </button>
+
+  <button type="button" class="btn btn-success btn-s mr-3" (click)="storeDocInfo($event)"
+  [disabled]="!uploader.queue.length">
+  <span class="fa fa-trash"></span> Store Data to Mongo(test)
+</button>
 </div>

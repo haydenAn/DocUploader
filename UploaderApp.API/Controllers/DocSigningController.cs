@@ -141,11 +141,6 @@ namespace UploaderApp.API.Controllers
             return Ok(docs);
         }
 
-        /// <summary>
-        /// Create new record in database and send initial email to end user
-        /// </summary>
-        /// <param name="doc"></param>
-        /// <returns>DocInfo object</returns>
         [HttpPost]
         public async Task<IActionResult> Post(DocumentInfo doc) //[FromBody] string value)
         {
@@ -179,6 +174,12 @@ namespace UploaderApp.API.Controllers
 
             return BadRequest("Error saving document/ email link info to database");
         }
+        [HttpPost("test")]
+                public async Task<IActionResult> Test(DocumentInfo doc)
+{
+    await  _repo.SaveAll();
+    return Ok();
+}
 
         /// <summary>
         /// Resend link to end user updates dateResent and (re)sends an email to end user

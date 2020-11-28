@@ -10,11 +10,14 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
+using UploaderApp.API.Models;
+using UploaderApp.API.Services;
 using UploaderApp.API.Data;
 
 namespace UploaderApp.API
@@ -31,6 +34,15 @@ namespace UploaderApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<DocInfoDbSettings>(
+                Configuration.GetSection(nameof(DocInfoDbSettings))
+            );
+            services.AddSingleton<IDocInfoDbSettings> ( sp =>
+                sp.GetRequiredService<IOptions<DocInfoDbSettings>>().Value
+            );
+
+            services.AddSingleton<DocInfoService>();
+
             services.AddDbContext<DataContext>(x => x.UseMySQL(Configuration.GetConnectionString("Default")));
             services.AddControllers();
             services.AddCors();
