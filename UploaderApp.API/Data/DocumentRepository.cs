@@ -54,10 +54,32 @@ namespace UploaderApp.API.Data
             } else { 
                 // DbSet<DocumentInfo> docs = _context.DocumentInfo;
                 var docs = _context.DocumentInfo.Where(x => x != null).OrderByDescending(r => (filter == "Agreed" ? r.dateAgreed : filter == "Resent" ? r.dateResent : filter == "Viewed" ? r.dateViewed : r.dateSent));
-                return await PagedList<DocumentInfo>.CreateAsync(docs, rptParams.PageNumber, rptParams.PageSize);
+                var r =  await PagedList<DocumentInfo>.CreateAsync(docs, rptParams.PageNumber, rptParams.PageSize);
+                return r;
             }            
         }
-
+       public async Task<PagedList<DocInfo>> GetDocs(ReportParams rptParams, string filter = "", string search = "")
+      {
+                      IQueryable<DocInfo> query;
+            if (!string.IsNullOrEmpty(search)) {
+               query = _context.DocInfo
+                    .Where(doc => doc.LastName.Contains(search) || doc.Company.Contains(search))
+                    .OrderByDescending(r => (filter == "Agreed" ? r.dateAgreed : filter == "Resent" ? r.dateResent : filter == "Viewed" ? r.dateViewed : r.dateSent));
+               if (!string.IsNullOrEmpty(filter)) { 
+                   query = query.Where(doc => doc.Status == filter);
+               }
+               return await PagedList<DocInfo>.CreateAsync(query, rptParams.PageNumber, rptParams.PageSize);
+            }
+            else if (filter == "Agreed" || filter=="Viewed" || filter == "Sent" || filter == "Resent") {
+               var q = _context.DocInfo.Where(doc => doc.Status == filter).OrderByDescending(r => (filter == "Agreed" ? r.dateAgreed : filter == "Resent" ? r.dateResent : filter == "Viewed" ? r.dateViewed : r.dateSent));
+               return await PagedList<DocInfo>.CreateAsync(q, rptParams.PageNumber, rptParams.PageSize);
+            } else {  
+                // DbSet<DocumentInfo> docs = _context.DocumentInfo;
+                var docs = _context.DocInfo.Where(x => x != null).OrderByDescending(r => (filter == "Agreed" ? r.dateAgreed : filter == "Resent" ? r.dateResent : filter == "Viewed" ? r.dateViewed : r.dateSent));
+                return await PagedList<DocInfo>.CreateAsync(docs, rptParams.PageNumber, rptParams.PageSize);
+            }         
+       }
+ 
         public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0;

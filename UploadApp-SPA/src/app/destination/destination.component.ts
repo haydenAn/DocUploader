@@ -44,7 +44,7 @@ export class DestinationComponent implements OnInit {
     // Without this, you get some strange console errors sometimes...arghh!! 
     // cannot read property of 'canhaz' of undefined
     this.documentName = this.emaildoc['documentFullName'];
-    console.log('Doc id=', this.emaildoc.id, ' with doc ', this.documentName);
+    // console.log('Doc id=', this.emaildoc.id, ' with doc ', this.documentName);
     this.received = false;
   }
 
@@ -67,30 +67,30 @@ export class DestinationComponent implements OnInit {
   // }
 
   view() {
-    this.docService.updateViewDate(this.emaildoc.id)
-      .subscribe(
-        () => {
-          this.notify.success('Date Viewed updated successfully');
-          this.viewed = true;
-        },
-        error => {
-          this.notify.error('Error updating date viewed.' + error);
-        }
-      );
+    // this.docService.updateViewDate(this.emaildoc.id)
+    //   .subscribe(
+    //     () => {
+    //       this.notify.success('Date Viewed updated successfully');
+    //       this.viewed = true;
+    //     },
+    //     error => {
+    //       this.notify.error('Error updating date viewed.' + error);
+    //     }
+    //   );
   }
 
   confirm() {
-    if (!this.viewed) { return; }
-    this.docService.updateAgreeDate(this.emaildoc.id)
-      .subscribe(
-        () => {
-          this.notify.success('Date Agreed updated successfully');
-          this.router.navigate(['/confirmation-page']);
-        },
-        error => {
-          this.notify.error('Error updating date agreed.' + error);
-        }
-      );
+    // if (!this.viewed) { return; }
+    // this.docService.updateAgreeDate(this.emaildoc.id)
+    //   .subscribe(
+    //     () => {
+    //       this.notify.success('Date Agreed updated successfully');
+    //       this.router.navigate(['/confirmation-page']);
+    //     },
+    //     error => {
+    //       this.notify.error('Error updating date agreed.' + error);
+    //     }
+    //   );
 
   }
 

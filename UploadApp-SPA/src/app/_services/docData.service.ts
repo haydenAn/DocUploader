@@ -16,12 +16,46 @@ export class DocDataService {
 constructor(private http: HttpClient) { }
 
 getDocumentInfo(emaillink): Observable<DocInfo> {
+  console.log('api/licensing get document info');
+
   const url = this.baseUrl + 'api/licensing/' + emaillink;
   console.log('in docdataservice...');
   return this.http.get<DocInfo>(url);
 }
+getAllDocumentInfo(page?, itemsPerPage?, filter?):  Observable<PaginationResult<DocInfo[]>>  {
+  console.log('api/docinfo get all info');
+
+  const paginatedResults: PaginationResult<DocInfo[]> = new PaginationResult<DocInfo[]>();
+  let params = new HttpParams();
+
+  if (page != null && itemsPerPage != null) {
+     params = params.append('pageNumber', page);
+     params = params.append('pageSize', itemsPerPage);
+  }
+
+  let url = this.baseUrl + 'api/docinfo';
+  if (filter != null) {
+    url += '/' + filter;
+  }
+
+  console.log('new report info url=' + url, params);
+  return this.http.get<DocInfo[]>(url, { observe: 'response', params })
+    .pipe(
+      map(response => {
+        console.log(response)
+        paginatedResults.result = response.body;
+        if (response.headers.get('Pagination') != null) {
+          paginatedResults.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+        console.log(paginatedResults)
+        return paginatedResults;
+      })
+    );
+}
 
 getReportInfo(page?, itemsPerPage?, filter?): Observable<PaginationResult<DocInfo[]>> {
+  console.log('api/licensing get report info');
+
   const paginatedResults: PaginationResult<DocInfo[]> = new PaginationResult<DocInfo[]>();
   let params = new HttpParams();
 
@@ -35,10 +69,11 @@ getReportInfo(page?, itemsPerPage?, filter?): Observable<PaginationResult<DocInf
     url += '/' + filter;
   }
 
-  console.log('new report info url=' + url);
+  console.log('new report info url=' + url , params);
   return this.http.get<DocInfo[]>(url, { observe: 'response', params })
     .pipe(
       map(response => {
+        console.log(response)
         paginatedResults.result = response.body;
         if (response.headers.get('Pagination') != null) {
           paginatedResults.pagination = JSON.parse(response.headers.get('Pagination'));

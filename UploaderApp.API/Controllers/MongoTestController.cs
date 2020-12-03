@@ -2,6 +2,10 @@ using UploaderApp.API.Models;
 using UploaderApp.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using UploaderApp.API.Data;
+using UploaderApp.API.Helpers;
+using System.Threading.Tasks;
+
 
 namespace UploaderApp.API.Controllers
 {
@@ -16,23 +20,32 @@ namespace UploaderApp.API.Controllers
             _docInfoService = docInfoService;
         }
 
+        //api/docinfo
         [HttpGet]
-        public ActionResult<List<DocInfo>> Get() =>
-            _docInfoService.Get();
+        [HttpGet("{filter}")]
+        public async Task<IActionResult> Get([FromQuery] ReportParams rptParams) {
 
-        [HttpGet("{id:length(24)}", Name = "GetDocInfo")]
-        public ActionResult<DocInfo> Get(string id)
+           var docs = await _docInfoService.Get(rptParams);
+
+           if(docs!= null){
+              Response.AddPagination(docs.CurrentPage, docs.PageSize, docs.TotalCount, docs.TotalPages);
+           }
+           return Ok(docs);
+        }
+
+        [HttpGet("{email:length(50)}", Name = "GetDocInfoByEmail")]
+        public ActionResult<DocInfo> Get(string email)
         {
-            var docInfo = _docInfoService.Get(id);
+            var docInfo = _docInfoService.Get(email);
 
             if (docInfo == null)
             {
                 return NotFound();
             }
-
+            // s1 = $"Sent {doc.DocumentFullName} to {doc.FirstName} {doc.LastName} at {doc.EmailAddress} at company {doc.Company}";
             return docInfo;
         }
-
+        
         [HttpPost]
         public ActionResult<DocInfo> Create(DocInfo docInfo)
         {

@@ -24,10 +24,11 @@ export class ReportPageComponent implements OnInit {
               private alertify: AlertifyService,
               private spinner: NgxSpinnerService,
               private docService: DocDataService,
-              private route: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute) { }
   // data: DocInfo[];
  
   ngOnInit() {
+    console.log('hit')
     this.spinner.show();
     setTimeout(() => {
       this.spinner.hide();
@@ -48,7 +49,8 @@ export class ReportPageComponent implements OnInit {
     //     console.log('Error during getReportData GET op', error);
     //   }
     // );
-    this.route.data.subscribe(response => {
+    console.log(this.activatedRoute)
+    this.activatedRoute.data.subscribe(response => {
       // this.data = response.docs.result;
       this.pagination = response.docs.pagination;
       console.log('Results=', response.docs.result);
@@ -79,6 +81,7 @@ export class ReportPageComponent implements OnInit {
   }
 
   loadNewPage() {
+    console.log("hit in loadNewpage report-page")
     this.docService.getReportInfo(this.pagination.currentPage, this.pagination.itemsPerPage, this.searchFilter).subscribe(
       (response: PaginationResult<DocInfo[]>) => {
         // this.data = response.result;

@@ -19,6 +19,15 @@ constructor(private docService: DocDataService,
 resolve(route: ActivatedRouteSnapshot): Observable<PaginationResult<DocInfo[]>> {
   const page = 1;
   const pageSize = 10;
+  if(route.params.id == 1){
+    //get ALL
+    return this.docService.getAllDocumentInfo(page, pageSize).pipe(
+      catchError(error => {
+        this.alertify.error('Problem retrieving document for report in resolver' + error);
+        this.router.navigate(['']);
+        return of(null);
+      }))
+  }
   return this.docService.getReportInfo(page, pageSize).pipe(
     catchError(error => {
       this.alertify.error('Problem retrieving document for report in resolver' + error);

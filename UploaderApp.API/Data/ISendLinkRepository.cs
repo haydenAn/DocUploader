@@ -14,7 +14,10 @@ namespace UploaderApp.API.Data
          Task<DocumentInfo> GetEmailLink(Guid guid, string guidString);
          Task<DocumentInfo> GetDocumentInfoById(int id);
          Task<PagedList<DocumentInfo>> GetReport(ReportParams rptParams, string filter = "", string search = "");
+          
+        Task<PagedList<DocInfo>> GetDocs(ReportParams rptParams, string filter = "", string search = "");
 
+        //  Task<PagedList<DocInfo> 
         //  Task<bool> ClickOnLink(Guid guid);
 
         //  Task<bool> ViewDocument(Guid guid);

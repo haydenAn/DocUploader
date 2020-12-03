@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace UploaderApp.API.Models
 {
     public class PagedList<T> : List<T>
@@ -13,7 +14,15 @@ namespace UploaderApp.API.Models
         public int PageSize { get; set; }
         public int TotalCount { get; set; }        
 
-        public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        // public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        // {
+        //     TotalCount = count; 
+        //     PageSize = pageSize;
+        //     CurrentPage = pageNumber;
+        //     TotalPages = (int) Math.Ceiling(count/(double)pageSize);
+        //     this.AddRange(items);
+        // }
+          public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
             TotalCount = count; 
             PageSize = pageSize;
@@ -27,6 +36,12 @@ namespace UploaderApp.API.Models
             var count = await source.CountAsync();
             var items = await source.Skip((pageNumber-1) * pageSize).Take(pageSize).ToListAsync();
             return new PagedList<T>(items, count, pageNumber, pageSize);            
+        }
+           public static async Task<PagedList<T>> CreateAsyncMongo(List<T> source, int pageNumber, int pageSize)
+        {
+            var count = await Task.FromResult(source.Count());
+            var items = await Task.FromResult(source.Skip((pageNumber-1) * pageSize).Take(pageSize).ToList());
+            return new PagedList<T>(items , count, pageNumber, pageSize);         
         }
     }
 }

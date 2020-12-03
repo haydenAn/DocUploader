@@ -26,12 +26,14 @@ import { ReportPageResolverService } from './_services/ReportPageResolver.servic
 import { SearchComponent } from './search/search.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ConfirmationPageComponent } from './confirmation-page/confirmation-page.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
    {
       path: '',
-      redirectTo: 'upload-page',
-      pathMatch: 'full'
+      // redirectTo: 'upload-page',
+      pathMatch: 'full',
+      component : HomeComponent
    },
    {
      path: 'upload-page',
@@ -47,7 +49,7 @@ const routes: Routes = [
       resolve: { doc: DocumentResolverService }
    },
    {
-      path: 'report-page',
+      path: 'report-page/:id',
       component: ReportPageComponent,
       resolve: { docs : ReportPageResolverService }
    },
@@ -69,7 +71,8 @@ const routes: Routes = [
       ReportPageComponent,
       NavComponent,
       SearchComponent,
-      ConfirmationPageComponent
+      ConfirmationPageComponent,
+      HomeComponent
    ],
    imports: [
       BrowserModule,

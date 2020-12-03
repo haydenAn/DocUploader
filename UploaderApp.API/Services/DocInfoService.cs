@@ -2,6 +2,12 @@ using UploaderApp.API.Models;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
+using UploaderApp.API.Helpers;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+
 
 namespace UploaderApp.API.Services
 {
@@ -17,12 +23,20 @@ namespace UploaderApp.API.Services
             _docInfos = database.GetCollection<DocInfo>(settings.CollectionName);
         }
 
-        public List<DocInfo> Get() =>
-            _docInfos.Find(docInfo => true).ToList();
-        
-        
-        public DocInfo Get(string id) =>
-            _docInfos.Find<DocInfo>(docInfo => docInfo.Id == id).FirstOrDefault();
+        // public List<DocInfo> Get() =>
+        //     _docInfos.Find(docInfo => true).ToList();
+
+        public async Task<PagedList<DocInfo>> Get([FromQuery] ReportParams rptParams){
+
+        //    var docsQuery = _docInfos.AsQueryable().Where(x=> x != null);
+           var docsQuery = _docInfos.Find(docInfo => true).ToList();
+
+           var result = await PagedList<DocInfo>.CreateAsyncMongo(docsQuery, rptParams.PageNumber, rptParams.PageSize);
+           return result;
+        }
+
+          public DocInfo Get(string email) =>
+            _docInfos.Find<DocInfo>(docInfo => docInfo.EmailAddress == email).FirstOrDefault();
 
         public DocInfo Create(DocInfo docInfo)
         {

@@ -27,6 +27,7 @@ export class SuccessPageComponent implements OnInit {
    }
 
   ngOnInit() {
+    console.log('hit')
     this.data.currentDocInfo.subscribe(di => this.docInfo = di);
     console.log('docinfo.emaillinkid=' + this.docInfo.emaillinkid);
     this.emaillink = this.baseUrl + 'sign-doc/' + this.docInfo.emaillinkid;
