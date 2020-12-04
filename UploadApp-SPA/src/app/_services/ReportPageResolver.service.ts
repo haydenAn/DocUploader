@@ -19,16 +19,41 @@ constructor(private docService: DocDataService,
 resolve(route: ActivatedRouteSnapshot): Observable<PaginationResult<DocInfo[]>> {
   const page = 1;
   const pageSize = 10;
+  let demoCustomerEmail = "jmikalauskas@indxlogic.com"
   if(route.params.id == 1){
     //get ALL
-    return this.docService.getAllDocumentInfo(page, pageSize).pipe(
+    return this.docService.getDocumentInfo(page, pageSize).pipe(
       catchError(error => {
         this.alertify.error('Problem retrieving document for report in resolver' + error);
         this.router.navigate(['']);
         return of(null);
       }))
   }
-  return this.docService.getReportInfo(page, pageSize).pipe(
+
+  if(route.params.id == 2){
+
+   var dict = {
+      "FirstName" : "John",
+      "EmailAddress" : demoCustomerEmail
+   }
+
+   let arr = []
+   for(let key in dict) {
+       arr.push(key)
+   }
+   dict["Keys"] = arr;
+
+    return this.docService.getDocumentInfo(page, pageSize, dict,null).pipe(
+      catchError(error => {
+        this.alertify.error('Problem retrieving document for report in resolver' + error);
+        this.router.navigate(['']);
+        return of(null);
+      }))
+  }
+  var dict2 = {
+   EmailAddress : demoCustomerEmail
+  }
+  return this.docService.getDocumentInfo(page, pageSize, dict2, null).pipe(
     catchError(error => {
       this.alertify.error('Problem retrieving document for report in resolver' + error);
       this.router.navigate(['']);

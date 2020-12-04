@@ -4,7 +4,7 @@ export class DocInfo {
     emailaddress: string;
     title: string;
     company: string;
-    salesforceid: string;
+    salesforceid: number;
     documentfullname: string;
     description: string;
     emaillinkid: string;

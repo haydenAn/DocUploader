@@ -98,7 +98,7 @@ export class UploadPageComponent implements OnInit {
       emailaddress: this.userEmails.get('email').value,
       title: this.userEmails.get('title').value,
       company: this.userEmails.get('company').value,
-      salesforceid: '101',
+      salesforceid: 101,
       dateSent: new Date(),
       dateViewed: new Date(),
       dateAgreed: new Date(),
@@ -123,6 +123,7 @@ export class UploadPageComponent implements OnInit {
       response => {
        // debugger;
         this.notify.success('Saved and email sent');
+        console.log(response)
         console.log('Post call successful w response=' + response.emaillink);
         this.clearFields();
       },
