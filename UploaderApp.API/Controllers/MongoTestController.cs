@@ -130,21 +130,19 @@ namespace UploaderApp.API.Controllers
             msg.IsBodyHtml = true;
             return msg;
         }
+        
         #endregion
-        // [HttpPut("{id}")]
-        // public IActionResult Update(string id, DocInfo docInfoIn)
-        // {
-        //     var docInfo = _docInfoService.GetAllDocs(id);
-
-        //     if (docInfo == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     _docInfoService.Update(id, docInfoIn);
-
-        //     return NoContent();
-        // }
+        [HttpPut("{id}")]
+        public IActionResult UpdateDocInfo(string id, DocInfo docInfo)
+        {
+            var doc = _docInfoService.GetSingleDoc(id);
+            if (doc == null)
+            {
+                return NotFound();
+            }
+            _docInfoService.UpdateDocInfo(id, docInfo);
+            return NoContent();
+        }
 
         // [HttpDelete("{id)}")]
         // public IActionResult Delete(string id)

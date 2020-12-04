@@ -73,9 +73,13 @@ namespace UploaderApp.API.Services
             _docInfos.InsertOne(docInfo);
             return docInfo;
         }
+
+        public List<DocInfo> GetSingleDoc(string id) {
+            return _docInfos.Find( x=> x.Id == id).ToList();
+        }
         
-        // public void Update(string id, DocInfo docInfoIn) =>
-        //     _docInfos.ReplaceOne(docInfo => docInfo.Id == id, docInfoIn);
+        public void UpdateDocInfo(string id, DocInfo docInfo) =>
+            _docInfos.ReplaceOne(x => x.Id == id, docInfo);
 
         // public void Remove(DocInfo docInfoIn) =>
         //     _docInfos.DeleteOne(docInfo => docInfo.Id == docInfoIn.Id);
