@@ -17,28 +17,26 @@ export class SuccessPageComponent implements OnInit {
   baseUrl = 'localhost:4200/';
 
   constructor(private data: SentEmailService, private router: Router) {
+    this.data.currentDocInfo.subscribe(di => this.docInfo = di);
+    this.emaillink = this.baseUrl + 'sign-doc/' + this.docInfo.emaillinkid;
+    this.emaillinkid = this.docInfo.emaillinkid;
+
     // debugger;
     const nav = this.router.getCurrentNavigation();
-    const state = nav.extras.state as {
-      emaillink: string
-    };
-    console.log('Test state emaillink=', state.emaillink);
-    this.statelink = state.emaillink;
+    // const state = nav.extras.state as {
+    //   emaillink: string
+    // };
+    // this.statelink = state.emaillink;
    }
 
   ngOnInit() {
-    console.log('hit')
-    this.data.currentDocInfo.subscribe(di => this.docInfo = di);
-    console.log('docinfo.emaillinkid=' + this.docInfo.emaillinkid);
-    this.emaillink = this.baseUrl + 'sign-doc/' + this.docInfo.emaillinkid;
-    this.emaillinkid = this.docInfo.emaillinkid;
-    console.log('emaillink=' + this.emaillink);
-    if (this.emaillink.length === 0) {
-      this.emaillink = this.baseUrl + 'sign-doc/' + this.statelink;
-      this.emaillinkid = this.statelink;
-      console.log('emaillink=' + this.emaillink, ' statelink=', this.statelink);
-    }
+    // if (this.emaillink.length === 0) {
+    //   this.emaillink = this.baseUrl + 'sign-doc/' + this.statelink;
+    //   this.emaillinkid = this.statelink;
+    //   console.log('emaillink=' + this.emaillink, ' statelink=', this.statelink);
+    // }
 
   }
 
 }
+

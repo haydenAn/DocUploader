@@ -34,38 +34,61 @@ namespace UploaderApp.API.Services
         }
 
         public async Task<PagedList<DocInfo>> GetDocsFilteredResult([FromQuery] ReportParams rptParams){
-          var status = rptParams.Status;
+          var keyword = rptParams.Keyword;
           var builder = Builders<DocInfo>.Filter;
-          //initialize filter
-          var filter = builder.Eq(rptParams.Keys[0],rptParams.GetType().GetProperty(rptParams.Keys[0]).GetValue(rptParams, null) );
-           
-           //apply activated filters from UI 
-           foreach (string key in rptParams.Keys)
-           {
-              if(key != rptParams.Keys[0]){
-                var value = rptParams.GetType().GetProperty(key).GetValue(rptParams, null);
-                filter = filter & builder.Eq( key , value );
-              }
-           }
+          PagedList<DocInfo> result = null;
+              ///if keys is null
+            if(rptParams.Keys == null){
+                
+                  if(keyword!=null & !String.IsNullOrEmpty(keyword))
+                {
+                   var value = keyword;
+                   var filter = builder.Eq( "FirstName" , value );
+                   filter = filter
+                   | builder.Eq( "LastName" , value )
+                   | builder.Eq( "EmailAddress" , value )
+                   | builder.Eq( "Title" , value )
+                   | builder.Eq( "Company" , value )
+                   | builder.Eq( "DocumentFullName" , value )
+                   | builder.Eq( "Description" , value );
 
-           if(rptParams.Keyword!=null)
-           {
-                var value = rptParams.Keyword;
-                filter = filter 
-                & builder.Eq( "FirstName" , value )
-                & builder.Eq( "LastName" , value )
-                & builder.Eq( "EmailAddress" , value )
-                & builder.Eq( "Title" , value )
-                & builder.Eq( "Company" , value )
-                & builder.Eq( "DocumentFullName" , value )
-                & builder.Eq( "Description" , value );
-           }
-           //sort by date descending
-           var filteredList = _docInfos.Find(filter)
-                         .SortByDescending(r =>(status == "Agreed" ? r.dateAgreed : status == "Resent" ? r.dateResent : status == "Viewed" ? r.dateViewed : r.dateSent))
-                         .ToList();
-           var result = await PagedList<DocInfo>.CreateAsyncMongo(filteredList, rptParams.PageNumber, rptParams.PageSize);
-           return result;
+                   //this is not working properly need to think about the way to 
+                   var filteredList = _docInfos.Find(filter)
+                                          .Sort(Builders<DocInfo>.Sort.Descending(r => r.dateSent))
+                                          .ToList();
+                   result = await PagedList<DocInfo>.CreateAsyncMongo(filteredList, rptParams.PageNumber, rptParams.PageSize);
+               }
+               
+            }
+            else{
+                    //apply activated filters from UI  //initialize filter
+                var filter = builder.Eq(rptParams.Keys[0],rptParams.GetType().GetProperty(rptParams.Keys[0]).GetValue(rptParams, null) );
+                foreach (string key in rptParams.Keys)
+                {
+                          if(key != rptParams.Keys[0]){
+                          var value = rptParams.GetType().GetProperty(key).GetValue(rptParams, null);
+                          filter = filter & builder.Eq( key , value );
+                         }
+                }
+                if(keyword!=null & !String.IsNullOrEmpty(keyword))
+                {
+                   var value = keyword;
+                   filter = filter 
+                   | builder.Eq( "FirstName" , value )
+                   | builder.Eq( "LastName" , value )
+                   | builder.Eq( "EmailAddress" , value )
+                   | builder.Eq( "Title" , value )
+                   | builder.Eq( "Company" , value )
+                   | builder.Eq( "DocumentFullName" , value )
+                   | builder.Eq( "Description" , value );
+               }
+                       //this is not working properly need to think about the way to 
+                   var filteredList = _docInfos.Find(filter)
+                                          .Sort(Builders<DocInfo>.Sort.Descending(r => r.dateSent))
+                                          .ToList();
+                   result = await PagedList<DocInfo>.CreateAsyncMongo(filteredList, rptParams.PageNumber, rptParams.PageSize);
+            }
+            return result;
         }
 
         public DocInfo CreatDocInfo(DocInfo docInfo)

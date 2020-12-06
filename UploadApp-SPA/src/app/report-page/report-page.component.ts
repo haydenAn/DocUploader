@@ -14,10 +14,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 })
 export class ReportPageComponent implements OnInit {
   pagination: Pagination;
-  search = "";
-  filter = "";
-  searchFilter = "";
-
+  filterDict = {};
+  keyword : string = "";
   data2 = new Array();
 
   constructor(
@@ -38,6 +36,7 @@ export class ReportPageComponent implements OnInit {
 
   getReportData() {
     this.activatedRoute.data.subscribe((response) => {
+      console.log(response.docs);
       this.pagination = response.docs.pagination;
       console.log("Results=", response.docs.result);
       // debugger;
@@ -74,10 +73,10 @@ export class ReportPageComponent implements OnInit {
   loadNewPage() {
     console.log("hit in loadNewpage report-page");
     this.docService
-      .getReportInfo(
+      .getDocumentInfo(
         this.pagination.currentPage,
         this.pagination.itemsPerPage,
-        this.searchFilter
+        this.filterDict
       )
       .subscribe(
         (response: PaginationResult<DocInfo[]>) => {
@@ -91,40 +90,33 @@ export class ReportPageComponent implements OnInit {
   }
 
   // This can be: Sent, south+Sent, or south
-  newSearch(filter: string) {
-    this.spinner.show();
-    if (filter === "") {
-      this.searchFilter = "";
-      this.search = this.filter = "";
-    } else if (!this.searchFilter.includes(filter)) {
-      // let parts = filter.split('+');
-      if (
-        filter.includes("Sent") ||
-        filter.includes("Resent") ||
-        filter.includes("Viewed") ||
-        filter.includes("Agreed")
-      ) {
-        this.filter = filter;
-      } else {
-        // is it not a filter term then it is a search
-        this.search = filter;
+  newSearch( data : any) {
+    this.keyword = data.keyword;
+
+    if(data.filter==null){
+      for (var key in this.filterDict) {
+          delete this.filterDict[key];
       }
-      this.searchFilter = this.search + "+" + this.filter;
-    } //  this.addFilter(filter);
-    console.log("Filter in", filter, "Received new search", this.searchFilter);
+      Object.assign(this.filterDict, {});
+    }
+    else{ Object.assign(this.filterDict, data.filter); }
+
+    this.getDocInfo();
+  }
+
+  getDocInfo(){
     this.docService
-      .getReportInfo(
+      .getDocumentInfo(
         this.pagination.currentPage,
         this.pagination.itemsPerPage,
-        this.searchFilter
+        this.filterDict,
+        this.keyword
       )
       .subscribe(
         (response: PaginationResult<DocInfo[]>) => {
           // debugger;
           console.log(response.result);
-          // this.data2 = response.result;
           this.addLastActionDate(response.result);
-          // this.data2.sort( (a, b) => { console.log(a.lastActionDate);  return a.lastActionDate - b.lastActionDate ; } );
           this.pagination = response.pagination;
         },
         (error) => {
@@ -136,26 +128,6 @@ export class ReportPageComponent implements OnInit {
     }, 300);
   }
 
-  // newFilter(filter: string) {
-  //   this.spinner.show();
-  //   this.searchFilter = filter;
-  //   console.log('Received new filter action', filter);
-  //   this.docService.getReportInfo(this.pagination.currentPage, this.pagination.itemsPerPage, filter).subscribe(
-  //     (response: PaginationResult<DocInfo[]>) => {
-  //       // debugger;
-  //       // console.log(response);
-  //       // this.data2 = response.result;
-  //       this.addLastActionDate(response.result);
-  //       this.pagination = response.pagination;
-  //     },
-  //     error => {
-  //       console.log('Error during loadNewPage() getReportData GET op', error);
-  //     }
-  //   );
-  //   setTimeout(() => {
-  //     this.spinner.hide();
-  //   }, 1500);
-  // }
 
   resendLink(id: number) {
     console.log("Resending link for #", id);
@@ -169,7 +141,7 @@ export class ReportPageComponent implements OnInit {
       this.docService.resendLink(id).subscribe(
         (resp) => {
           this.alertify.success("Resent email link");
-          this.newSearch(this.searchFilter);
+          this.newSearch(this.filterDict);
         },
         (error) => {
           this.alertify.error("Error during resend link: " + error);

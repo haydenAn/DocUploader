@@ -12,4 +12,5 @@ export class DocInfo {
     dateViewed: Date;
     dateAgreed: Date;
     dateResent: Date;
+    tags : Array<string>;
 }

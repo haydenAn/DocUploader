@@ -32,7 +32,7 @@ resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):  Observable<
     EmailAddress : demoCustomerEmail
    }
   console.log('in resolver resolve...');
-  return this.docService.getDocumentInfo(page, pageSize, dict2,"");
+  return this.docService.getDocumentInfo(page, pageSize, dict2);
 }
 
 }

@@ -6,13 +6,16 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit {
-  @Output() sendSearch = new EventEmitter();
-  search: string = '';
+  @Output() sendSearch = new EventEmitter<{keyword: string, filter: any}>();
+  // @Output addModel = new EventEmitter<{make: string, name: string}>();
+
+
+  keyword: string = '';
   sent = false;
   resent = false;
   viewed = false;
   agreed = false;
-  buttonValue = '';
+  filterDict = {};
 
   constructor() { }
 
@@ -20,35 +23,37 @@ export class SearchComponent implements OnInit {
   }
 
   searchReport() {
-    console.log('Searching for ', this.search);
-    this.sendSearch.emit(this.search);
+    console.log('Searching for keyword ', this.keyword);
+
+    let copy = Object.assign({}, this.filterDict);
+    this.sendSearch.emit({keyword:this.keyword, filter :copy});
   }
 
   onCheckboxChange(value: string, ischecked: boolean) {
     console.log('radio button', value, ' is checked=', ischecked);
-    // this.sendFilter.emit(value);
-    this.buttonValue = value;
-    this.sendSearch.emit(value);
+
+    this.filterDict["Status"] = value.toString();
+    let copy = Object.assign({}, this.filterDict);
+    this.sendSearch.emit({keyword:this.keyword, filter:copy});
   }
 
-  // clearSearch() {
-  //   console.log('Cleared search w buttonvalue=', this.buttonValue);
-  //   this.search = '';
-  //   this.sendSearch.emit(this.buttonValue);
-  // }
-
   clearFilters() {
-    this.search = '';
+    this.keyword = '';
     this.sent = false;
     this.resent = false;
     this.viewed = false;
     this.agreed = false;
-    this.sendSearch.emit('');
+
+    for (var key in this.filterDict) {
+      delete this.filterDict[key];
+    }
+    Object.assign(this.filterDict, {});
+    //don't change this line
+    this.sendSearch.emit({keyword:this.keyword, filter:null});
   }
 
   anythingOn() {
-    // console.log('Checking', this.search.length);
-    if (this.search.length > 0) {
+    if (this.keyword.length > 0) {
       return true;
     }
     return this.sent || this.resent || this.viewed || this.agreed;

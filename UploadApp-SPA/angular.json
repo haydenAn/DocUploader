@@ -5,7 +5,11 @@
   "projects": {
     "UploadApp-SPA": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -24,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/custom-theme.scss",
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],

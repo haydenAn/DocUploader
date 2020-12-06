@@ -13,6 +13,7 @@ constructor() { }
 
 changeDocInfo(doc: DocInfo) {
   this.infoSource.next(doc);
+  this.currentDocInfo.subscribe(di => console.log(di));
 }
 
 }

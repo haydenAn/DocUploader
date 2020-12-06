@@ -1,0 +1,10 @@
+.tag-input{
+   border: none;
+   border-bottom: 1px solid #ced4da;
+    
+   &:focus {
+       border: none;
+       outline: none;
+       border-bottom: 2.5px solid #ced4da;
+   }
+}

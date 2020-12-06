@@ -31,11 +31,12 @@ namespace UploaderApp.API.Controllers
         public async Task<IActionResult> GetDocInfo([FromQuery] ReportParams rptParams) {
             
            PagedList<DocInfo> docs;
-           if(rptParams.Keys == null){
+           if(rptParams.Keys == null && String.IsNullOrEmpty(rptParams.Keyword)){
               docs = await _docInfoService.GetDocInfo(rptParams);
            }
-           
-           docs = await _docInfoService.GetDocsFilteredResult(rptParams);
+           else{
+               docs = await _docInfoService.GetDocsFilteredResult(rptParams);
+           }
 
            if(docs!= null){
               Response.AddPagination(docs.CurrentPage, docs.PageSize, docs.TotalCount, docs.TotalPages);

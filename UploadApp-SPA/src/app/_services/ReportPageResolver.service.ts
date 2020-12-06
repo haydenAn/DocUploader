@@ -32,18 +32,7 @@ resolve(route: ActivatedRouteSnapshot): Observable<PaginationResult<DocInfo[]>> 
 
   if(route.params.id == 2){
 
-   var dict = {
-      "FirstName" : "John",
-      "EmailAddress" : demoCustomerEmail
-   }
-
-   let arr = []
-   for(let key in dict) {
-       arr.push(key)
-   }
-   dict["Keys"] = arr;
-
-    return this.docService.getDocumentInfo(page, pageSize, dict,null).pipe(
+    return this.docService.getDocumentInfo(page, pageSize).pipe(
       catchError(error => {
         this.alertify.error('Problem retrieving document for report in resolver' + error);
         this.router.navigate(['']);
@@ -53,7 +42,7 @@ resolve(route: ActivatedRouteSnapshot): Observable<PaginationResult<DocInfo[]>> 
   var dict2 = {
    EmailAddress : demoCustomerEmail
   }
-  return this.docService.getDocumentInfo(page, pageSize, dict2, null).pipe(
+  return this.docService.getDocumentInfo(page, pageSize, dict2).pipe(
     catchError(error => {
       this.alertify.error('Problem retrieving document for report in resolver' + error);
       this.router.navigate(['']);

@@ -8,6 +8,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { FileUploadModule } from 'ng2-file-upload';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { MaterialModule } from "./material.module";
 
 import { AppComponent } from './app.component';
 
@@ -27,6 +28,7 @@ import { SearchComponent } from './search/search.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ConfirmationPageComponent } from './confirmation-page/confirmation-page.component';
 import { HomeComponent } from './home/home.component';
+import { TagComponent } from './tag/tag.component';
 
 const routes: Routes = [
    {
@@ -72,7 +74,8 @@ const routes: Routes = [
       NavComponent,
       SearchComponent,
       ConfirmationPageComponent,
-      HomeComponent
+      HomeComponent,
+      TagComponent
    ],
    imports: [
       BrowserModule,
@@ -84,6 +87,7 @@ const routes: Routes = [
       NgxSpinnerModule,
       PdfViewerModule,
       Ng2SmartTableModule,
+      MaterialModule,
       RouterModule.forRoot(routes),
       PaginationModule.forRoot()
    ],

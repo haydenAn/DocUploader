@@ -10,12 +10,13 @@
     margin-bottom: 40px !important;
 }
 .my-drop-zone{
-    height: 150px;
-
-}
-.my-drop-zone > span{
-    position: relative;
-    top: 40%;
+    height: 160px;
+    display:flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items:center;
+    background-color: whitesmoke;
+    opacity: 0.8;
 }
 .file-input{
     margin-bottom: 1rem;
@@ -23,4 +24,21 @@
 }
 .file-input > button{
     cursor: pointer;
+}
+
+.section-divider{
+    height: 2rem;
+    width: 100%;
+}
+
+.drop-icon{
+    color: #ced4da;
+}
+
+.btn-success{
+    background-color:#2c8cfc;
+}
+
+.action-list{
+   
 }

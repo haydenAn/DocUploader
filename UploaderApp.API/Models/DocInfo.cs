@@ -50,5 +50,7 @@ namespace UploaderApp.API.Models
         public DateTime dateResent { get; set; }
 
         public string Status { get; set; }
+
+        public string[] Tags {get; set;}
     }
 }

@@ -1,4 +1,7 @@
 <div class="header d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+ 
+  <ngx-spinner></ngx-spinner>
+
   <img class="my-0 mr-md-auto" src="assets/images/indxlogic.png" alt="image">   
   <nav class="my-2 my-md-0 mr-md-3 cc_cursor">
     <a class="p-2 text-dark" href="#">Go back to Upload</a>
@@ -6,14 +9,14 @@
 </div>
 <div class="d-flex w-100 h-100 p-5 mx-auto flex-column">
   <main role="main" class="main">
-      <h1 class="cover-heading">Email link #{{emailinkid}} successfully created and sent!</h1>
+      <h1 class="cover-heading">Email link successfully created and sent!</h1>
       <br/>
     <p class="lead">
       Your auto e-signing links were successfully sent to {{docInfo?.firstname}} {{docInfo?.lastname}}! To review your upload and details please click the links below</p>
 <ul class="esign-links">
 <a href={{emaillink}}>View Document</a>
-<!-- <a [routerLink]="['/sign-doc']" [queryParams]="{debug: true}" queryParamsHandling="merge">
-</a> -->
+<a [routerLink]="['/sign-doc']" [queryParams]="{debug: true}" queryParamsHandling="merge">
+</a>
 <!-- for the time we send params -->
 </ul>
 

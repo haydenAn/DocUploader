@@ -13,7 +13,7 @@ export class DocDataService {
   // s/b localhost:5000/s
   baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getDocumentInfo(
     page?,
@@ -21,25 +21,34 @@ export class DocDataService {
     filter?,
     keyword?
   ): Observable<PaginationResult<DocInfo[]>> {
-    
     const paginatedResults: PaginationResult<DocInfo[]> = new PaginationResult<DocInfo[]>();
-    let params = new HttpParams();
+    var params = new HttpParams();
+    const validateFilter = (target) => {
+      if (target == null) {
+        return false;
+      }
+      return Object.keys(target).length !== 0;
+    };
+    var copiedFilter = validateFilter(filter) ? Object.assign({}, filter) : null;///need to use copy of filter here otherwise the value will have dulipated+nested filter within filter
 
     if (page != null && itemsPerPage != null) {
       params = params.append("pageNumber", page);
       params = params.append("pageSize", itemsPerPage);
     }
-    
-    console.log(filter);
-    
-    if (filter != null) {
-      for( let key in filter){
-        params = params.append(key, filter[key]);
+    if(Boolean(keyword)){ 
+      params = params.append("Keyword", keyword);
       }
-      params = params.set("Keys", filter["Keys"]);
-    }
-    if (keyword!= null){
-      params = params.append("keyword", keyword)
+
+    if (copiedFilter != null) {
+      let arr = [];
+
+      for (let key in copiedFilter) {
+          params = params.append(key, copiedFilter[key]);
+          arr.push(key);
+      }
+      let updatedFilter = { "Keys" : arr };
+      Object.assign(copiedFilter, updatedFilter);
+      params = params.append("Keys", copiedFilter["Keys"]);
     }
 
     let url = this.baseUrl + "api/docinfo";
