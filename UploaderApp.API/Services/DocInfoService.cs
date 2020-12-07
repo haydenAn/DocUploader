@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Reflection;
-
+using MongoDB.Bson;
+using System.Text.RegularExpressions;
 
 namespace UploaderApp.API.Services
 {
@@ -39,18 +40,17 @@ namespace UploaderApp.API.Services
           PagedList<DocInfo> result = null;
               ///if keys is null
             if(rptParams.Keys == null){
-                
                   if(keyword!=null & !String.IsNullOrEmpty(keyword))
                 {
-                   var value = keyword;
-                   var filter = builder.Eq( "FirstName" , value );
+                   var value = new BsonRegularExpression("/^" + keyword + "$/i");
+                   var filter = builder.Regex("FirstName" , value );
                    filter = filter
-                   | builder.Eq( "LastName" , value )
-                   | builder.Eq( "EmailAddress" , value )
-                   | builder.Eq( "Title" , value )
-                   | builder.Eq( "Company" , value )
-                   | builder.Eq( "DocumentFullName" , value )
-                   | builder.Eq( "Description" , value );
+                   | builder.Regex( "LastName" , value )
+                   | builder.Regex( "EmailAddress" , value )
+                   | builder.Regex( "Title" , value )
+                   | builder.Regex( "Company" , value )
+                   | builder.Regex( "DocumentFullName" , value )
+                   | builder.Regex( "Description" , value );
 
                    //this is not working properly need to think about the way to 
                    var filteredList = _docInfos.Find(filter)
@@ -58,29 +58,28 @@ namespace UploaderApp.API.Services
                                           .ToList();
                    result = await PagedList<DocInfo>.CreateAsyncMongo(filteredList, rptParams.PageNumber, rptParams.PageSize);
                }
-               
             }
             else{
                     //apply activated filters from UI  //initialize filter
                 var filter = builder.Eq(rptParams.Keys[0],rptParams.GetType().GetProperty(rptParams.Keys[0]).GetValue(rptParams, null) );
                 foreach (string key in rptParams.Keys)
                 {
-                          if(key != rptParams.Keys[0]){
-                          var value = rptParams.GetType().GetProperty(key).GetValue(rptParams, null);
-                          filter = filter & builder.Eq( key , value );
-                         }
+                    if(key != rptParams.Keys[0]){
+                        var value = rptParams.GetType().GetProperty(key).GetValue(rptParams, null);
+                        filter = filter & builder.Eq( key , value );
+                    }
                 }
                 if(keyword!=null & !String.IsNullOrEmpty(keyword))
                 {
-                   var value = keyword;
+                   var value = new BsonRegularExpression("/^" + keyword + "$/i");
                    filter = filter 
-                   | builder.Eq( "FirstName" , value )
-                   | builder.Eq( "LastName" , value )
-                   | builder.Eq( "EmailAddress" , value )
-                   | builder.Eq( "Title" , value )
-                   | builder.Eq( "Company" , value )
-                   | builder.Eq( "DocumentFullName" , value )
-                   | builder.Eq( "Description" , value );
+                   & builder.Regex( "FirstName" , value )
+                   | builder.Regex( "LastName" , value )
+                   | builder.Regex( "EmailAddress" , value )
+                   | builder.Regex( "Title" , value )
+                   | builder.Regex( "Company" , value )
+                   | builder.Regex( "DocumentFullName" , value )
+                   | builder.Regex( "Description" , value );
                }
                        //this is not working properly need to think about the way to 
                    var filteredList = _docInfos.Find(filter)
