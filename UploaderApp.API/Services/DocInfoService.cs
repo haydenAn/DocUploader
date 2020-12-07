@@ -49,7 +49,6 @@ namespace UploaderApp.API.Services
                    | builder.Regex( "EmailAddress" , value )
                    | builder.Regex( "Title" , value )
                    | builder.Regex( "Company" , value )
-                   | builder.Regex( "DocumentFullName" , value )
                    | builder.Regex( "Description" , value );
 
                    //this is not working properly need to think about the way to 
@@ -78,7 +77,6 @@ namespace UploaderApp.API.Services
                    | builder.Regex( "EmailAddress" , value )
                    | builder.Regex( "Title" , value )
                    | builder.Regex( "Company" , value )
-                   | builder.Regex( "DocumentFullName" , value )
                    | builder.Regex( "Description" , value );
                }
                        //this is not working properly need to think about the way to 

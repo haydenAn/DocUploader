@@ -1,33 +1,82 @@
-<div class="container">  
-        <div class="form-group mt-1">
-          <label>Filter</label>
-            <label class="checkbox-inline mt-2">
-              <input type="radio" class="ml-4" id="sent" name="filter" value="sent" [(ngModel)]="sent" (change)="onCheckboxChange('Sent', $event.target.checked)">Sent
-            </label>
-            <label class="checkbox-inline">
-              <input type="radio" class="ml-4" id="resent" name="filter" value="resent" [(ngModel)]="resent" (change)="onCheckboxChange('Resent', $event.target.checked)">Resent
-            </label>
-            <label class="checkbox-inline">
-              <input type="radio" class="ml-4" id="viewed" name="filter" value="viewed" [(ngModel)]="viewed" (change)="onCheckboxChange('Viewed', $event.target.checked)">Viewed
-            </label>
-            <label class="checkbox-inline">
-              <input type="radio" class="ml-4" id="agreed" name="filter" value="agreedsent" [(ngModel)]="agreed" (change)="onCheckboxChange('Agreed', $event.target.checked)">Agreed
-            </label>
+<div class="searchComponent">
 
-  <div class="row float-right mt-1">
-    <form class="form-inline " #passwordForm="ngForm" (ngSubmit)="searchReport()">
-      <!-- <div class="btn-group">
-        <input id="searchinput" class="form-control mr-sm-2" type="search" class="form-control" placeholder="Search" required >
-        <a class="clear" (click)="clearSearch()">
-          <span id="searchclear" class="glyphicon glyphicon-remove-circle" ></span>
-        </a>        
-      </div> -->
-      <input class="form-control mr-sm-2" type="text" id="keyword" name="keyword" placeholder="keyword" required
-        [(ngModel)]="keyword">
-      <button class="btn btn-success ml-2 my-sm-0" type="submit">Search</button>
+  <section class="header mt-3 container-lg">
+
+    <form #passwordForm="ngForm" class="left col-sm-6 form-group" (ngSubmit)="searchReport()">
+      <input class="form-control" type="text" id="keyword" name="keyword" placeholder="Search by keyword"
+        required [(ngModel)]="keyword">
     </form>
-    <button class="btn btn-warning ml-4 my-sm-0" *ngIf="anythingOn()"
-      (click)="clearFilters()"><span class="fa fa-ban"></span> Clear filter and search
-    </button>
-  </div>
+
+    <div class="right col-sm-6">
+      <ul>
+        applied filters
+      </ul>
+
+      <button class="btn btn-light" (click)="toggleOpenState()">
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-funnel-fill" fill="#2c8cfc"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd"
+            d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" />
+        </svg>
+        <label class="ml-2 action-label">Filters</label>
+      </button>
+    </div>
+
+  </section>
+
+  <section class="filter-list container-lg" *ngIf="panelOpenState" [@inOutAnimation]>
+    <form (ngSubmit)="searchReport()"> 
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="ex) email@example.com" [(ngModel)]="email">
+
+        <label>First Name</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="ex) Jane" [(ngModel)]="firstName">
+
+        <label>Last Name</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="ex) Doe" [(ngModel)]="lastName">
+
+        <label>Documnet Title</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="ex) CIO" [(ngModel)]="title">
+
+        <label>Company</label>
+        <input type="text" class="form-control" id="company" name="company" placeholder="ex) North example Hospital" [(ngModel)]="company">
+
+        <label>Description</label>
+        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="description">
+      </div>
+
+      <hr>
+      <div class="form-group">
+        <label class="checkbox-inline mt-2">
+          <input type="radio" class="ml-4" id="sent" name="filter" value="sent" [(ngModel)]="sent"
+            (change)="onCheckboxChange('Sent', $event.target.checked)">Sent
+        </label>
+        <label class="checkbox-inline">
+          <input type="radio" class="ml-4" id="resent" name="filter" value="resent" [(ngModel)]="resent"
+            (change)="onCheckboxChange('Resent', $event.target.checked)">Resent
+        </label>
+        <label class="checkbox-inline">
+          <input type="radio" class="ml-4" id="viewed" name="filter" value="viewed" [(ngModel)]="viewed"
+            (change)="onCheckboxChange('Viewed', $event.target.checked)">Viewed
+        </label>
+        <label class="checkbox-inline">
+          <input type="radio" class="ml-4" id="agreed" name="filter" value="agreedsent" [(ngModel)]="agreed"
+            (change)="onCheckboxChange('Agreed', $event.target.checked)">Agreed
+        </label>
+      </div>
+
+      <div class="action-list">
+        <button type="button" class="btn btn-outline-warning" (click)="clearFilters()"><span
+            class="fa fa-ban"></span> Clear filter
+        </button>
+        <button type="submit" class="btn btn-primary" >
+          Apply Filters
+        </button>
+      </div>
+    </form>
+
+  </section>
+
+
 </div>

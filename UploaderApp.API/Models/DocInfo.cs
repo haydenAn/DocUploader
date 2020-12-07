@@ -36,11 +36,11 @@ namespace UploaderApp.API.Models
 
         public string Company { get; set; }
 
-        public int SalesforceId { get; set; }
-
         public string DocumentFullName { get; set; }
 
         public string Description { get; set; }
+
+        public int SalesforceId { get; set; }
 
         public string UniqueLinkId { get; set; }
 
