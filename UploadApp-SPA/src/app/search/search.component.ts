@@ -7,6 +7,11 @@ import {
   transition,
 } from "@angular/animations";
 
+export interface ActivatedFilter {
+  name: string;
+  value : any;
+}
+
 @Component({
   selector: "app-search",
   templateUrl: "./search.component.html",
@@ -26,6 +31,10 @@ import {
 })
 export class SearchComponent implements OnInit {
   @Output() sendSearch = new EventEmitter<{ keyword: string; filter: any }>();
+  activatedFilters: ActivatedFilter[] = [
+  ];
+  selectable = true;
+  removable = true;
   panelOpenState = false;
 
   keyword: string = "";
@@ -56,24 +65,61 @@ export class SearchComponent implements OnInit {
     this.filterDict["Company"] = this.company;
     this.filterDict["Description"] = this.description;
 
+    this.sendFilterData();
+    this.panelOpenState = false;
+  }
+  sendFilterData(){
     let copy = Object.assign({}, this.filterDict);
     this.sendSearch.emit({ keyword: this.keyword, filter: copy });
-    this.panelOpenState = false;
+
+    let arr = [];
+    for(let key in copy){
+      if(Boolean(copy[key])){
+        arr.push({name : key , value : copy[key]});
+      }
+    }
+    this.activatedFilters = arr;
+  }
+
+  remove(filter: ActivatedFilter): void {
+    console.log(filter);
+    this.filterDict[filter.name] = null;
+    this.sendFilterData();
+    const index = this.activatedFilters.indexOf(filter);
+    if (index >= 0) {
+      this.activatedFilters.splice(index, 1);
+    }
   }
 
   onCheckboxChange(value: string, ischecked: boolean) {
     console.log("radio button", value, " is checked=", ischecked);
+    switch (value) {
+      case "Sent":
+        this.sent = ischecked;
+        break;
+      case "Resent":
+        this.resent = ischecked;
+        break;
+      case "Viewd":
+        this.viewed = ischecked;
+        break;
+      case "Agreed":
+        this.agreed = ischecked;
+        break;
+      default:
+        break;
+    }
     this.filterDict["Status"] = value.toString();
   }
 
   clearFilters() {
     this.keyword = "";
-    this.email= "";
-    this.firstName= "";
-    this.lastName= "";
-    this.title= "";
-    this.company= "";
-    this.description= "";
+    this.email = "";
+    this.firstName = "";
+    this.lastName = "";
+    this.title = "";
+    this.company = "";
+    this.description = "";
 
     this.sent = false;
     this.resent = false;
@@ -92,5 +138,6 @@ export class SearchComponent implements OnInit {
 
   toggleOpenState() {
     this.panelOpenState = !this.panelOpenState;
+    console.log(this.filterDict);
   }
 }

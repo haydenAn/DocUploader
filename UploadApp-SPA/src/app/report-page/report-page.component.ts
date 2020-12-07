@@ -101,6 +101,13 @@ export class ReportPageComponent implements OnInit {
     }
     else{ Object.assign(this.filterDict, data.filter); }
 
+    //validate filterDict 
+    //edit this when adding date time to searchable fields 
+     for (var key in this.filterDict) {
+      if(!Boolean(this.filterDict[key])){
+        delete this.filterDict[key];
+      }
+    }
     this.getDocInfo();
   }
 

@@ -40,3 +40,6 @@
     display:flex;
     justify-content: space-between;
 }
+.checkbox-inline input{
+    margin-right: 10px;
+}

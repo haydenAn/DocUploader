@@ -12,22 +12,24 @@
   <table class="table table-striped">
     <thead>
       <tr class="d-flex">
-        <th class="col-2">First Name</th>
-        <th class="col-3">Last Name</th>
-        <th class="col-3">Company</th>
-        <th class="col-1">Status</th>
-        <th class="col-2">Last Date update</th>
-        <th class="col-1">Action</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Company</th>
+        <th>Email Address</th>
+        <th>Status</th>
+        <th>Last Date update</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let item of data2" class="d-flex">
-        <td class="col-2">{{ item.firstName }}</td>
-        <td class="col-3">{{ item.lastName }}</td>
-        <td class="col-3">{{ item.company }}</td>
-        <td class="col-1">{{ item.status }}</td>
-        <td class="col-2">{{ item.lastActionDate | date }}</td>
-        <td class="col-1" *ngIf="item.status==='Sent'">
+        <td>{{ item.firstName }}</td>
+        <td>{{ item.lastName }}</td>
+        <td>{{ item.company }}</td>
+        <td>{{ item.emailAddress }}</td>
+        <td>{{ item.status }}</td>
+        <td>{{ item.lastActionDate | date }}</td>
+        <td *ngIf="item.status==='Sent'">
           <button type="button" class="btn btn-success" (click)="resendLink(item.id)">Resend</button>
         </td>
       </tr>
