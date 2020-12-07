@@ -1,5 +1,5 @@
 .filter-list {
-  height: 300px;
+  height: 260px;
 }
 
 .header {
@@ -28,4 +28,15 @@
 .filter-list {
   background-color: #f8f9fa;
   border-radius: 5px;
+}
+
+.filter-list .top{
+    display:grid;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+
+}
+.filter-list .bottom{
+    display:flex;
+    justify-content: space-between;
 }
