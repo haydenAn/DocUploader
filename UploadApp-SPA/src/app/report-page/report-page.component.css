@@ -1,4 +1,15 @@
-.d-flex th{
-    /* font-weight: normal; */
-    color: #a6acb3;
+.d-flex th {
+  /* font-weight: normal; */
+  color: #a6acb3;
+}
+
+.section {
+  padding: 1.5rem 0 1.5rem 0;
+  border-bottom: 1px solid #ced4da;
+}
+
+.heading {
+  color: #2a69d5;
+  margin-bottom: 0;
+  padding-left: 1em;
 }

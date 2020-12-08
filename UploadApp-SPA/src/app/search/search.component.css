@@ -5,6 +5,9 @@
 .header {
   display: flex;
   flex-direction: row;
+  padding: 1.5rem 0 1.5rem 0;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ced4da;
 }
 
 .left {
@@ -28,18 +31,18 @@
 .filter-list {
   background-color: #f8f9fa;
   border-radius: 5px;
+  border-bottom: 1px solid #ced4da;
 }
 
-.filter-list .top{
-    display:grid;
-    grid-auto-flow: column;
-    justify-content: flex-start;
-
+.filter-list .top {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: flex-start;
 }
-.filter-list .bottom{
-    display:flex;
-    justify-content: space-between;
+.filter-list .bottom {
+  display: flex;
+  justify-content: space-between;
 }
-.checkbox-inline input{
-    margin-right: 10px;
+.checkbox-inline input {
+  margin-right: 10px;
 }

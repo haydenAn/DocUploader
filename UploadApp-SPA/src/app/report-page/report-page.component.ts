@@ -17,6 +17,7 @@ export class ReportPageComponent implements OnInit {
   filterDict = {};
   keyword : string = "";
   data2 = new Array();
+  count = 0;
 
   constructor(
     private http: HttpClient,
@@ -38,6 +39,7 @@ export class ReportPageComponent implements OnInit {
     this.activatedRoute.data.subscribe((response) => {
       console.log(response.docs);
       this.pagination = response.docs.pagination;
+      this.count = response.docs.result.length;
       console.log("Results=", response.docs.result);
       // debugger;
       this.addLastActionDate(response.docs.result);
