@@ -8,6 +8,7 @@ export class DocInfo {
     documentfullname: string;
     description: string;
     emaillinkid: string;
+    filepath: string;
     dateSent: Date;
     dateViewed: Date;
     dateAgreed: Date;

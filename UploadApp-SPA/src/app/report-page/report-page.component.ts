@@ -137,6 +137,17 @@ export class ReportPageComponent implements OnInit {
     }, 300);
   }
 
+  downloadDocFile(fileId){
+    this.docService.getDocumentFile(fileId).subscribe(
+      (response)=>{
+          console.log(response)
+        },
+        (error) => {
+          this.alertify.error("Error during resend link: " + error);
+        }
+      )
+  }
+
 
   resendLink(id: number) {
     console.log("Resending link for #", id);

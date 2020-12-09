@@ -86,6 +86,20 @@ export class UploadPageComponent implements OnInit {
       item.withCredentials = false;
     };
   }
+  // onFileChange(event) {
+  //   let reader = new FileReader();
+  //   if(event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.form.get('avatar').setValue({
+  //         filename: file.name,
+  //         filetype: file.type,
+  //         value: reader.result.split(',')[1]
+  //       })
+  //     };
+  //   }
+  // }
 
   // this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 
@@ -104,18 +118,21 @@ export class UploadPageComponent implements OnInit {
       dateResent: new Date(),
       description: "",
       emaillinkid: "",
-      tags: this.tags
+      tags: this.tags,
+      filepath: ""
     };
     const files = [];
     let docs = "";
+    console.log(this.uploader)
     console.log("uploader=");
     this.uploader.queue.forEach((f) => {
-      console.log(f.file.name);
       files.push(f.file.name);
       docs = docs + f.file.name + ";";
+      docInfo.filepath = f.file.name;
     });
     docInfo.documentfullname =
-      "C:\\users\\default.DESKTOP-GRQ62EF\\Pictures\\" + docs;
+    "C:\\users\\default.DESKTOP-GRQ62EF\\Pictures\\" + docs;
+    docInfo.filepath= "C:\\Users\\hayde_5jbn1tp\\Desktop\\DocInfoService (1).cs";
     debugger;
 
     this.spinner.show();

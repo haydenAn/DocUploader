@@ -26,6 +26,9 @@ namespace UploaderApp.API.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string FileId {get; set;}
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -40,9 +43,11 @@ namespace UploaderApp.API.Models
 
         public string Description { get; set; }
 
+        public string UniqueLinkId { get; set; }
+
         public int SalesforceId { get; set; }
 
-        public string UniqueLinkId { get; set; }
+        public string FilePath { get; set; }
 
         public DateTime dateSent { get; set; }
         public DateTime dateViewed { get; set; }

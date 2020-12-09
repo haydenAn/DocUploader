@@ -1,16 +1,14 @@
 using UploaderApp.API.Models;
 using UploaderApp.API.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using UploaderApp.API.Data;
 using UploaderApp.API.Helpers;
 using System.Threading.Tasks;
 using System;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-
+using MongoDB.Bson;
+using System.IO;
 
 namespace UploaderApp.API.Controllers
 {
@@ -143,6 +141,25 @@ namespace UploaderApp.API.Controllers
             }
             _docInfoService.UpdateDocInfo(id, docInfo);
             return NoContent();
+        }
+        [HttpPost("upload")]
+        public IActionResult SendFile([FromQuery] string filename, string id)
+        {
+            var docInfo = _docInfoService.UploadFile(filename, id);
+            return Ok();
+        }
+
+        [HttpGet("download")]
+        public IActionResult GetFile([FromQuery] string id)
+        {
+
+            var bytes = _docInfoService.DownloadFile(id);
+
+            //using (var newFs = new FileStream("mgtestdoc.jpg", FileMode.Create))
+            //{
+            //    newFs.Write(bytes, 0, bytes.Length);
+            //}
+            return Ok();
         }
 
         // [HttpDelete("{id)}")]

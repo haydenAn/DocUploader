@@ -2,52 +2,55 @@
 
 <div class="container">
 
-<section class="section">
-  <h5 class="heading">UPLOADER TRAIL INQUIRY</h5>
-</section>
-
-<app-search 
-  (sendSearch)="newSearch($event)" 
-></app-search>
-
-<ngx-spinner></ngx-spinner>
-
-<div class="result">
-
   <section class="section">
-    <h5 class="heading">RESULTS({{ count }})</h5>
+    <h5 class="heading">UPLOADER TRAIL INQUIRY</h5>
   </section>
 
-  <table class="table table-striped">
-    <thead>
-      <tr class="d-flex">
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Company</th>
-        <th>Email Address</th>
-        <th>Status</th>
-        <th>Last Date update</th>
-        <th>Tags</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of data2" class="d-flex">
-        <td>{{ item.firstName }}</td>
-        <td>{{ item.lastName }}</td>
-        <td>{{ item.company }}</td>
-        <td>{{ item.emailAddress }}</td>
-        <td>{{ item.status }}</td>
-        <td>{{ item.lastActionDate | date }}</td>
-        <td><mat-chip *ngFor="let tag of item.tags">{{tag}}</mat-chip></td>
-        <td *ngIf="item.status==='Sent'">
-          <button type="button" class="btn btn-success" (click)="resendLink(item.id)">Resend</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <app-search (sendSearch)="newSearch($event)"></app-search>
 
-</div>
+  <ngx-spinner></ngx-spinner>
+
+  <div class="result">
+
+    <section class="section">
+      <h5 class="heading">RESULTS({{ count }})</h5>
+    </section>
+
+    <table class="table table-striped">
+      <thead>
+        <tr class="d-flex">
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Company</th>
+          <th>Email Address</th>
+          <th>Status</th>
+          <th>Last Date update</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data2" class="d-flex data-row">
+          <div>
+            <td>{{ item.firstName }}</td>
+            <td>{{ item.lastName }}</td>
+            <td>{{ item.company }}</td>
+            <td>{{ item.emailAddress }}</td>
+            <td>{{ item.status }}</td>
+            <td>{{ item.lastActionDate | date }}</td>
+            <td>
+              <mat-chip *ngFor="let tag of item.tags">{{tag}}</mat-chip>
+            </td>
+          </div>
+          <div class="action-row">
+              <button *ngIf="item.status==='Sent'" type="button" class="btn btn-success" (click)="resendLink(item.id)">Resend</button>
+              <button type="button" class="btn" (click)="resendLink(item.id)">Delete</button>
+              <button type="button" class="btn" (click)="downloadDocFile(item.fileId)">Download File</button>
+            </div>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
 
 </div>
 
