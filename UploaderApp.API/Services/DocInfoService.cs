@@ -170,10 +170,10 @@ namespace UploaderApp.API.Services
             return fileInfo.Any();
         }
 
-        public async Task<byte[]> DownloadFile(string id)
+        public async Task<GridFSDownloadStream> DownloadFile(string id)
         {
              ObjectId oid = new ObjectId(id);
-            GridFSBucket fs = new GridFSBucket(_db);
+            GridFSBucket fsBucket = new GridFSBucket(_db);
             //This works
 
             try
@@ -183,21 +183,23 @@ namespace UploaderApp.API.Services
                 //var t = fs.DownloadAsBytesByNameAsync("docup20201208-023109.txt");
 
                 var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", oid);
-                var test = await dbfiles.Find(filter).FirstOrDefaultAsync();
+                // var test = await dbfiles.Find(filter).FirstOrDefaultAsync();
+                var test = await fsBucket.FindAsync(filter);
+                var firstData = test.FirstOrDefault();
 
-                var x = fs.DownloadAsBytesAsync(oid);
-                Task.WaitAll(x);
-                var bytes = x.Result;
+                var dataStream = await fsBucket.OpenDownloadStreamAsync(oid);
+                return dataStream;
 
-                // var file = dbfiles.Find<GridFSFileInfo>(rec => rec.Id == oid).FirstOrDefault();
+                // var x = fs.DownloadAsBytesAsync(oid);
+                // Task.WaitAll(x);
+                // var bytes = x.Result;
 
-                using (var newFs = new FileStream(test.Filename, FileMode.Create))
-                {
-                    newFs.Write(bytes, 0, bytes.Length);
-                }
+                // using (var newFs = new FileStream(test.Filename, FileMode.Create))
+                // {
+                //     newFs.Write(bytes, 0, bytes.Length);
+                // }
 
-                //return fileObj;
-                return bytes;
+                // return bytes;
             }
             catch (Exception ex)
             {

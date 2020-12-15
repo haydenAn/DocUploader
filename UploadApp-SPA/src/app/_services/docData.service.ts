@@ -70,19 +70,21 @@ export class DocDataService {
         })
       );
   }
-  getDocumentFile(id){
+  downloadFile(id) : any {
     var params = new HttpParams();
     params = params.append("id", id);
     let url = this.baseUrl + "api/docinfo/download";
     console.log("new report info url=" + url, id);
     return this.http
-      .get<DocInfo[]>(url, { observe: "response" , params})
+      .get(url, { responseType:'blob',observe: "response" , params})
       .pipe(
         map((response) => {
           console.log(response);
+          return response
         })
       );
   }
+
   getReportInfo(
     page?,
     itemsPerPage?,

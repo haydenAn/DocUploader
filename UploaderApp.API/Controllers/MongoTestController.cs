@@ -150,16 +150,16 @@ namespace UploaderApp.API.Controllers
         }
 
         [HttpGet("download")]
-        public IActionResult GetFile([FromQuery] string id)
+        public async Task<IActionResult> GetFile([FromQuery] string id)
         {
 
-            var bytes = _docInfoService.DownloadFile(id);
+            var fileStream = await _docInfoService.DownloadFile(id);
 
             //using (var newFs = new FileStream("mgtestdoc.jpg", FileMode.Create))
             //{
             //    newFs.Write(bytes, 0, bytes.Length);
             //}
-            return Ok();
+            return Ok(fileStream);
         }
 
         // [HttpDelete("{id)}")]

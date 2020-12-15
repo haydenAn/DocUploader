@@ -41,11 +41,12 @@
               <mat-chip *ngFor="let tag of item.tags">{{tag}}</mat-chip>
             </td>
           </div>
+          <div class="tags">fdvsdfv</div>
           <div class="action-row">
               <button *ngIf="item.status==='Sent'" type="button" class="btn btn-success" (click)="resendLink(item.id)">Resend</button>
               <button type="button" class="btn" (click)="resendLink(item.id)">Delete</button>
               <button type="button" class="btn" (click)="downloadDocFile(item.fileId)">Download File</button>
-            </div>
+          </div>
         </tr>
       </tbody>
     </table>

@@ -1,5 +1,5 @@
 .filter-list {
-  height: 260px;
+  min-height: 260px;
 }
 
 .header {

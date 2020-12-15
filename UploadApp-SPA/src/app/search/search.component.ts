@@ -20,10 +20,10 @@ export interface ActivatedFilter {
     trigger("inOutAnimation", [
       transition(":enter", [
         style({ height: 0, opacity: 0 }),
-        animate("0.5s ease-out", style({ height: 260, opacity: 1 })),
+        animate("0.5s ease-out", style({ height: 270, opacity: 1 })),
       ]),
       transition(":leave", [
-        style({ height: 260, opacity: 1 }),
+        style({ height: 270, opacity: 1 }),
         animate("0.5s ease-in", style({ height: 0, opacity: 0 })),
       ]),
     ]),

@@ -6,6 +6,8 @@ import { DocInfo } from "../models/docinfo";
 import { PaginationResult, Pagination } from "../models/Pagination";
 import { ActivatedRoute } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
+import * as fileSaver from 'file-saver';
+
 
 @Component({
   selector: "app-report-page",
@@ -138,12 +140,16 @@ export class ReportPageComponent implements OnInit {
   }
 
   downloadDocFile(fileId){
-    this.docService.getDocumentFile(fileId).subscribe(
+    this.docService.downloadFile(fileId).subscribe(
       (response)=>{
-          console.log(response)
+          console.log(response);
+          let blob:any = new Blob([response], {type: 'text/xml'});
+          const url = window.URL.createObjectURL(blob);
+          // window.open(url)
+          fileSaver.saveAs(blob, 'test.txt');
         },
         (error) => {
-          this.alertify.error("Error during resend link: " + error);
+          this.alertify.error("Error during download link: " + error);
         }
       )
   }
