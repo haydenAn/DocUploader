@@ -1,54 +1,41 @@
-import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { DocInfo } from '../models/docinfo';
-import { Observable, of } from 'rxjs';
-import { DocDataService } from './docData.service';
-import { PaginationResult } from '../models/Pagination';
-import { catchError } from 'rxjs/operators';
-import { AlertifyService } from './alertify.service';
+import { Injectable } from "@angular/core";
+import {
+  Resolve,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from "@angular/router";
+import { DocInfo } from "../models/docinfo";
+import { Observable, of } from "rxjs";
+import { DocDataService } from "./docData.service";
+import { PaginationResult } from "../models/Pagination";
+import { catchError } from "rxjs/operators";
+import { AlertifyService } from "./alertify.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
-export class ReportPageResolverService implements Resolve<PaginationResult<DocInfo[]>> {
+export class ReportPageResolverService
+  implements Resolve<PaginationResult<DocInfo[]>> {
+  constructor(
+    private docService: DocDataService,
+    private router: Router,
+    private alertify: AlertifyService
+  ) {}
 
-constructor(private docService: DocDataService,
-            private router: Router,
-            private alertify: AlertifyService) { }
-
-resolve(route: ActivatedRouteSnapshot): Observable<PaginationResult<DocInfo[]>> {
-  const page = 1;
-  const pageSize = 10;
-  let demoCustomerEmail = "jmikalauskas@indxlogic.com"
-  if(route.params.id == 1){
-    //get ALL
+  resolve(
+    route: ActivatedRouteSnapshot
+  ): Observable<PaginationResult<DocInfo[]>> {
+    const page = 1;
+    const pageSize = 10;
     return this.docService.getDocumentInfo(page, pageSize).pipe(
-      catchError(error => {
-        this.alertify.error('Problem retrieving document for report in resolver' + error);
-        this.router.navigate(['']);
+      catchError((error) => {
+        this.alertify.error(
+          "Problem retrieving document for report in resolver" + error
+        );
+        this.router.navigate([""]);
         return of(null);
-      }))
+      })
+    );
   }
-
-  if(route.params.id == 2){
-
-    return this.docService.getDocumentInfo(page, pageSize).pipe(
-      catchError(error => {
-        this.alertify.error('Problem retrieving document for report in resolver' + error);
-        this.router.navigate(['']);
-        return of(null);
-      }))
-  }
-  var dict2 = {
-   EmailAddress : demoCustomerEmail
-  }
-  return this.docService.getDocumentInfo(page, pageSize, dict2).pipe(
-    catchError(error => {
-      this.alertify.error('Problem retrieving document for report in resolver' + error);
-      this.router.navigate(['']);
-      return of(null);
-    })
-  );
-}
-
 }

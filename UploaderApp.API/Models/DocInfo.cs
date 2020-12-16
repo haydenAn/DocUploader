@@ -1,25 +1,9 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace UploaderApp.API.Models
 {
-    public class DocInfoDbSettings : IDocInfoDbSettings
-    {
-        public string CollectionName { get; set; }
-        public string ConnectionString { get; set; }
-        public string DatabaseName { get; set; }
-    }
-
-    public interface IDocInfoDbSettings
-    {
-        string CollectionName { get; set; }
-        string ConnectionString { get; set; }
-        string DatabaseName { get; set; }
-    }
     public class DocInfo
     {
         [BsonId]
@@ -57,5 +41,6 @@ namespace UploaderApp.API.Models
         public string Status { get; set; }
 
         public string[] Tags {get; set;}
+        public ObjectId[] Owners {get; set;}
     }
 }

@@ -145,7 +145,7 @@ export class ReportPageComponent implements OnInit {
           console.log(response);
           let blob:any = new Blob([response], {type: 'text/xml'});
           const url = window.URL.createObjectURL(blob);
-          // window.open(url)
+          // window.open(url)  -> this only works for certain file format 
           fileSaver.saveAs(blob, 'test.txt');
         },
         (error) => {

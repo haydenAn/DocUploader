@@ -38,11 +38,15 @@
     border-radius: 10px;
   }
 
-  .card:hover {
+  .admin:hover {
     color: var(--slideTextColor);
     cursor: pointer;
     background-position: -50% 50%;
   }
 .home{
  text-align: center;
+}
+.form{
+  width: 70%;
+  margin: 0 auto;
 }

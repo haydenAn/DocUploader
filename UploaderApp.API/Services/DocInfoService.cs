@@ -19,12 +19,12 @@ namespace UploaderApp.API.Services
         private readonly IMongoDatabase _db;
         private string _dbName;
 
-        public DocInfoService(IDocInfoDbSettings settings)
+        public DocInfoService(IDocumentInfoDBSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             _dbName = settings.DatabaseName;
             _db = client.GetDatabase(_dbName);
-            _docInfos = _db.GetCollection<DocInfo>(settings.CollectionName);
+            _docInfos = _db.GetCollection<DocInfo>(settings.DocInfoCollectionName);
         }
 
         public async Task<PagedList<DocInfo>> GetDocInfo([FromQuery] ReportParams rptParams)
@@ -159,10 +159,6 @@ namespace UploaderApp.API.Services
         public async Task<bool> FileExistsAsync(ObjectId oid) // string gfsname, string bucketName)
         {
             var bucket = new GridFSBucket(_db);
-            //, new GridFSBucketOptions
-            //{
-            //    BucketName = bucketName
-            //}); ;
 
             var filter = Builders<GridFSFileInfo>.Filter.Eq(x => x.Id, oid); // .Filename, gfsname);
             var fileInfo = await bucket.FindAsync(filter);
@@ -180,45 +176,18 @@ namespace UploaderApp.API.Services
             {
                 IMongoCollection<GridFSFileInfo> dbfiles = _db.GetCollection<GridFSFileInfo>("fs.files");
 
-                //var t = fs.DownloadAsBytesByNameAsync("docup20201208-023109.txt");
-
                 var filter = Builders<GridFSFileInfo>.Filter.Eq("_id", oid);
-                // var test = await dbfiles.Find(filter).FirstOrDefaultAsync();
                 var test = await fsBucket.FindAsync(filter);
                 var firstData = test.FirstOrDefault();
 
                 var dataStream = await fsBucket.OpenDownloadStreamAsync(oid);
                 return dataStream;
 
-                // var x = fs.DownloadAsBytesAsync(oid);
-                // Task.WaitAll(x);
-                // var bytes = x.Result;
-
-                // using (var newFs = new FileStream(test.Filename, FileMode.Create))
-                // {
-                //     newFs.Write(bytes, 0, bytes.Length);
-                // }
-
-                // return bytes;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            //using (var stream = fileObj.OpenRead())
-            //{
-            //    var bytes = new byte[stream.Length];
-            //    stream.Read(bytes, 0, (int)stream.Length);
-            //    using (var newFs = new FileStream(fileObj.FirstOrDefault().filename, FileMode.Create))
-            //    {
-            //        newFs.Write(bytes, 0, bytes.Length);
-            //    }
-            //}
-
-            //This blows chunks (I think it's a driver bug, I'm using 2.1 RC-0)
-            //var x = fs.DownloadAsBytesAsync(oid);
-            //Task.WaitAll(x);
-            //var bytes2 = x.Result;
             return null;
         }
     }

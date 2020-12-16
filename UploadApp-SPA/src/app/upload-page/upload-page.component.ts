@@ -73,8 +73,6 @@ export class UploadPageComponent implements OnInit {
       url: this.baseUrl + "docs", // 'users/' + this.authService.decodedToken.nameid + '/photos',
       // authToken: 'Bearer' + localStorage.getItem('token'),
       isHTML5: true,
-      // allowedFileType: ['image'],
-      // removeAfterUpload: true,
       autoUpload: false,
       maxFileSize: 10 * 1024 * 1024,
       headers: [
@@ -86,22 +84,6 @@ export class UploadPageComponent implements OnInit {
       item.withCredentials = false;
     };
   }
-  // onFileChange(event) {
-  //   let reader = new FileReader();
-  //   if(event.target.files && event.target.files.length > 0) {
-  //     let file = event.target.files[0];
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => {
-  //       this.form.get('avatar').setValue({
-  //         filename: file.name,
-  //         filetype: file.type,
-  //         value: reader.result.split(',')[1]
-  //       })
-  //     };
-  //   }
-  // }
-
-  // this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 
   storeDocInfo() {
     const docInfo: DocInfo = {

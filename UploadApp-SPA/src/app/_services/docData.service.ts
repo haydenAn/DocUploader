@@ -15,21 +15,11 @@ export class DocDataService {
 
   constructor(private http: HttpClient) {}
 
-  getDocumentInfo(
-    page?,
-    itemsPerPage?,
-    filter?,
-    keyword?
-  ): Observable<PaginationResult<DocInfo[]>> {
-    const paginatedResults: PaginationResult<DocInfo[]> = new PaginationResult<DocInfo[]>();
+  setParams(page?,itemsPerPage?, filter?, keyword?):HttpParams{
     var params = new HttpParams();
-    const validateFilter = (target) => {
-      if (target == null) {
-        return false;
-      }
-      return Object.keys(target).length !== 0;
-    };
-    var copiedFilter = validateFilter(filter) ? Object.assign({}, filter) : null;///need to use copy of filter here otherwise the value will have dulipated+nested filter within filter
+    var errorMsg = '';
+    //if session user id exist else throw error
+    params = params.append("userId", localStorage.getItem('userId'));
 
     if (page != null && itemsPerPage != null) {
       params = params.append("pageNumber", page);
@@ -39,6 +29,14 @@ export class DocDataService {
       params = params.append("Keyword", keyword);
       }
 
+    const validateFilter = (target) => {
+      if (target == null) {
+        return false;
+      }
+      return Object.keys(target).length !== 0;
+    };
+    var copiedFilter = validateFilter(filter) ? Object.assign({}, filter) : null;///need to use copy of filter here otherwise the value will have dulipated+nested filter within filter
+  
     if (copiedFilter != null) {
       let arr = [];
 
@@ -50,6 +48,17 @@ export class DocDataService {
       Object.assign(copiedFilter, updatedFilter);
       params = params.append("Keys", copiedFilter["Keys"]);
     }
+    return params;
+  }
+
+  getDocumentInfo(
+    page?,
+    itemsPerPage?,
+    filter?,
+    keyword?
+  ): Observable<PaginationResult<DocInfo[]>> {
+    const paginatedResults: PaginationResult<DocInfo[]> = new PaginationResult<DocInfo[]>();
+    const params = this.setParams(page,itemsPerPage,filter,keyword);
 
     let url = this.baseUrl + "api/docinfo";
 
@@ -70,6 +79,7 @@ export class DocDataService {
         })
       );
   }
+
   downloadFile(id) : any {
     var params = new HttpParams();
     params = params.append("id", id);
@@ -81,45 +91,6 @@ export class DocDataService {
         map((response) => {
           console.log(response);
           return response
-        })
-      );
-  }
-
-  getReportInfo(
-    page?,
-    itemsPerPage?,
-    filter?
-  ): Observable<PaginationResult<DocInfo[]>> {
-    console.log("api/licensing get report info");
-
-    const paginatedResults: PaginationResult<DocInfo[]> = new PaginationResult<
-      DocInfo[]
-    >();
-    let params = new HttpParams();
-
-    if (page != null && itemsPerPage != null) {
-      params = params.append("pageNumber", page);
-      params = params.append("pageSize", itemsPerPage);
-    }
-
-    let url = this.baseUrl + "api/licensing/report";
-    if (filter != null) {
-      url += "/" + filter;
-    }
-
-    console.log("new report info url=" + url, params);
-    return this.http
-      .get<DocInfo[]>(url, { observe: "response", params })
-      .pipe(
-        map((response) => {
-          console.log(response);
-          paginatedResults.result = response.body;
-          if (response.headers.get("Pagination") != null) {
-            paginatedResults.pagination = JSON.parse(
-              response.headers.get("Pagination")
-            );
-          }
-          return paginatedResults;
         })
       );
   }
