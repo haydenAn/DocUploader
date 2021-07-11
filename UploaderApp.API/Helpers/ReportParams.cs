@@ -22,6 +22,9 @@ namespace UploaderApp.API.Helpers
             get { return keys; }
             set { keys = value!=null ? value[0].Split(',') : null; }
         }
+
+        public string UserId { get; set; }
+
         
         public string FirstName { get; set; }
         public string LastName { get; set; }

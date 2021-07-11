@@ -23,6 +23,7 @@ export class UploadPageComponent implements OnInit {
   baseUrl = environment.apiUrl + "api/docinfo";
   dntLinkUrl = "";
   tags = [];
+  owners = [];
   userEmails = new FormGroup({
     firstname: new FormControl(""),
     lastname: new FormControl(""),
@@ -67,6 +68,10 @@ export class UploadPageComponent implements OnInit {
     console.log("Dropped=" + e);
     this.droppedFiles = e;
   }
+  public onFileChanged(e: any): void {
+    console.log(e.target.files);
+    console.log(this.uploader.queue)
+  }
 
   initializeUploader() {
     this.uploader = new FileUploader({
@@ -86,6 +91,7 @@ export class UploadPageComponent implements OnInit {
   }
 
   storeDocInfo() {
+    this.owners.push(localStorage.getItem("userId"));
     const docInfo: DocInfo = {
       documentfullname: "",
       firstname: this.userEmails.get("firstname").value,
@@ -101,11 +107,12 @@ export class UploadPageComponent implements OnInit {
       description: "",
       emaillinkid: "",
       tags: this.tags,
-      filepath: ""
+      filepath: "",
+      owners: this.owners,
     };
     const files = [];
     let docs = "";
-    console.log(this.uploader)
+    console.log(this.uploader);
     console.log("uploader=");
     this.uploader.queue.forEach((f) => {
       files.push(f.file.name);
@@ -113,8 +120,9 @@ export class UploadPageComponent implements OnInit {
       docInfo.filepath = f.file.name;
     });
     docInfo.documentfullname =
-    "C:\\users\\default.DESKTOP-GRQ62EF\\Pictures\\" + docs;
-    docInfo.filepath= "C:\\Users\\hayde_5jbn1tp\\Desktop\\DocInfoService (1).cs";
+      "C:\\users\\default.DESKTOP-GRQ62EF\\Pictures\\" + docs;
+    docInfo.filepath =
+      "C:\\Users\\hayde_5jbn1tp\\Desktop\\DocInfoService (1).cs";
     debugger;
 
     this.spinner.show();
@@ -131,15 +139,15 @@ export class UploadPageComponent implements OnInit {
       (error) => {
         console.log("Error during sendLink POST op", error);
       }
-    )
+    );
     setTimeout(() => {
       this.spinner.hide();
-      this.navigate('success-upload');
+      this.navigate("success-upload");
     }, 1000);
   }
 
-  navigate(url){
-    this.router.navigate(['/'+ url]);
+  navigate(url) {
+    this.router.navigate(["/" + url]);
   }
   getTags(tags) {
     this.tags = tags;

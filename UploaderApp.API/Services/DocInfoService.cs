@@ -16,6 +16,7 @@ namespace UploaderApp.API.Services
     public class DocInfoService
     {
         private readonly IMongoCollection<DocInfo> _docInfos;
+        private readonly IMongoCollection<User> _users;
         private readonly IMongoDatabase _db;
         private string _dbName;
 
@@ -25,82 +26,99 @@ namespace UploaderApp.API.Services
             _dbName = settings.DatabaseName;
             _db = client.GetDatabase(_dbName);
             _docInfos = _db.GetCollection<DocInfo>(settings.DocInfoCollectionName);
+            _users = _db.GetCollection<User>(settings.UserCollectionName);
         }
 
         public async Task<PagedList<DocInfo>> GetDocInfo([FromQuery] ReportParams rptParams)
         {
+            var builder = Builders<DocInfo>.Filter;
+            FilterDefinition<DocInfo> filter;
+            bool isAdmin = false;
+            //TODO check user role here
+            if (isAdmin)
+            {
+                var docs = _docInfos.Find(DocInfo=>true).ToList();
+                var result = await PagedList<DocInfo>.CreateAsyncMongo(docs, rptParams.PageNumber, rptParams.PageSize);
+                return result;
+            }
+            else
+            {
+                filter = builder.AnyEq( "Owners", rptParams.UserId);
+                var docs = _docInfos.Find(filter).ToList();
+                var result = await PagedList<DocInfo>.CreateAsyncMongo(docs, rptParams.PageNumber, rptParams.PageSize);
+                return result;
+            }
+        }
 
-            var docs = _docInfos.Find(docInfo => true).ToList();
+        private FilterDefinition<DocInfo> buildOwnedDocumentFilter(ReportParams rptParams)
+        {
+            string userId = rptParams.UserId;
+            string keyword = rptParams.Keyword;
+            string[] keys = rptParams.Keys;
 
-            var result = await PagedList<DocInfo>.CreateAsyncMongo(docs, rptParams.PageNumber, rptParams.PageSize);
-            return result;
+            var user = _users.Find(user => user.Id == userId).FirstOrDefault();
+            var builder = Builders<DocInfo>.Filter;
+            FilterDefinition<DocInfo> filter;
+
+            //TODO check user role here
+            bool isAdmin = false;
+            filter = builder.AnyEq("Owners", userId);
+
+            if (keyword != null & !String.IsNullOrEmpty(keyword))
+            {
+                var keywordFilter = this.buildKeywordFilter(keyword);
+                filter = filter & keywordFilter;
+            }
+            if (keys != null)
+            {
+                foreach (string key in keys)
+                {
+                    var value = rptParams.GetType().GetProperty(key).GetValue(rptParams, null);
+                    filter = filter & builder.Eq(key, value);
+                }
+            }
+            return filter;
+        }
+
+        private FilterDefinition<DocInfo> buildKeywordFilter(string keyword)
+        {
+            var builder = Builders<DocInfo>.Filter;
+            var value = new BsonRegularExpression("/^" + keyword + "$/i");
+
+            var filter = builder.Regex("FirstName", value)
+               | builder.Regex("LastName", value)
+               | builder.Regex("EmailAddress", value)
+               | builder.Regex("Title", value)
+               | builder.Regex("Company", value)
+               | builder.Regex("Description", value);
+
+            return filter;
         }
 
         public async Task<PagedList<DocInfo>> GetDocsFilteredResult([FromQuery] ReportParams rptParams)
         {
-            var keyword = rptParams.Keyword;
             var builder = Builders<DocInfo>.Filter;
             PagedList<DocInfo> result = null;
-            ///if keys is null
-            if (rptParams.Keys == null)
-            {
-                if (keyword != null & !String.IsNullOrEmpty(keyword))
-                {
-                    var value = new BsonRegularExpression("/^" + keyword + "$/i");
-                    var filter = builder.Regex("FirstName", value);
-                    filter = filter
-                    | builder.Regex("LastName", value)
-                    | builder.Regex("EmailAddress", value)
-                    | builder.Regex("Title", value)
-                    | builder.Regex("Company", value)
-                    | builder.Regex("Description", value);
 
-                    //this is not working properly need to think about the way to 
-                    var filteredList = _docInfos.Find(filter)
-                                           .Sort(Builders<DocInfo>.Sort.Descending(r => r.dateSent))
-                                           .ToList();
-                    result = await PagedList<DocInfo>.CreateAsyncMongo(filteredList, rptParams.PageNumber, rptParams.PageSize);
-                }
-            }
-            else
-            {
-                //apply activated filters from UI  //initialize filter
-                var filter = builder.Eq(rptParams.Keys[0], rptParams.GetType().GetProperty(rptParams.Keys[0]).GetValue(rptParams, null));
-                foreach (string key in rptParams.Keys)
-                {
-                    if (key != rptParams.Keys[0])
-                    {
-                        var value = rptParams.GetType().GetProperty(key).GetValue(rptParams, null);
-                        filter = filter & builder.Eq(key, value);
-                    }
-                }
-                if (keyword != null & !String.IsNullOrEmpty(keyword))
-                {
-                    var value = new BsonRegularExpression("/^" + keyword + "$/i");
-                    filter = filter
-                    & builder.Regex("FirstName", value)
-                    | builder.Regex("LastName", value)
-                    | builder.Regex("EmailAddress", value)
-                    | builder.Regex("Title", value)
-                    | builder.Regex("Company", value)
-                    | builder.Regex("Description", value);
-                }
-                //this is not working properly need to think about the way to 
-                var filteredList = _docInfos.Find(filter)
-                                       .Sort(Builders<DocInfo>.Sort.Descending(r => r.dateSent))
-                                       .ToList();
-                result = await PagedList<DocInfo>.CreateAsyncMongo(filteredList, rptParams.PageNumber, rptParams.PageSize);
-            }
+            var filter = this.buildOwnedDocumentFilter(rptParams);
+
+            //this is not working properly need to think about the way to 
+            var filteredList = _docInfos.Find(filter)
+                                   .Sort(Builders<DocInfo>.Sort.Descending(r => r.dateSent))
+                                   .ToList();
+            result = await PagedList<DocInfo>.CreateAsyncMongo(filteredList, rptParams.PageNumber, rptParams.PageSize);
+
             return result;
         }
 
         public DocInfo CreatDocInfo(DocInfo docInfo)
         {
             _docInfos.InsertOne(docInfo);
-            if (docInfo!=null){
+            if (docInfo != null)
+            {
                 var fileId = this.UploadFile(docInfo.FilePath, docInfo.Id);
                 docInfo.FileId = fileId.ToString();
-                this.UpdateDocInfo(docInfo.Id, docInfo );
+                this.UpdateDocInfo(docInfo.Id, docInfo);
             }
             return docInfo;
         }
@@ -119,15 +137,15 @@ namespace UploaderApp.API.Services
         // public void Remove(string id) => 
         //     _docInfos.DeleteOne(docInfo => docInfo.Id == id);
 
-        public ObjectId UploadFromStreamAsync(string filename, System.IO.Stream stream,GridFSUploadOptions options )
+        public ObjectId UploadFromStreamAsync(string filename, System.IO.Stream stream, GridFSUploadOptions options)
         {
             GridFSBucket gridFSBucket = new GridFSBucket(_db);
             var gridFsBucket2 = new GridFSBucket(_db);
             // var task = Task.Run(() => {
             //   gridFsBucket.UploadFromStreamAsync(filename, stream);
             // });
-            
-            ObjectId fid = gridFsBucket2.UploadFromStream(filename, stream,options);
+
+            ObjectId fid = gridFsBucket2.UploadFromStream(filename, stream, options);
 
             return fid; //  task.Result;
         }
@@ -140,16 +158,15 @@ namespace UploaderApp.API.Services
             {
                 var t = Task.Run<ObjectId>(() =>
                 {
-                     var options = new GridFSUploadOptions
+                    var options = new GridFSUploadOptions
                     {
-                       Metadata = new BsonDocument
+                        Metadata = new BsonDocument
                       {
                        { "docinfo_id", docinfoid }
-                      }   
+                      }
                     };
-            
-                    string filename2 = "docup" + DateTime.Now.ToString("yyyyMMdd-hhmmss") + ".txt";
-                    return fs.UploadFromStreamAsync(filename2, s,options);
+
+                    return fs.UploadFromStreamAsync(filename, s, options);
                 });
 
                 return t.Result;
@@ -168,7 +185,7 @@ namespace UploaderApp.API.Services
 
         public async Task<GridFSDownloadStream> DownloadFile(string id)
         {
-             ObjectId oid = new ObjectId(id);
+            ObjectId oid = new ObjectId(id);
             GridFSBucket fsBucket = new GridFSBucket(_db);
             //This works
 

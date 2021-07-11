@@ -41,6 +41,6 @@ namespace UploaderApp.API.Models
         public string Status { get; set; }
 
         public string[] Tags {get; set;}
-        public ObjectId[] Owners {get; set;}
+        public string[] Owners {get; set;}
     }
 }

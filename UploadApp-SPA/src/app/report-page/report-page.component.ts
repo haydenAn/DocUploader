@@ -143,7 +143,7 @@ export class ReportPageComponent implements OnInit {
     this.docService.downloadFile(fileId).subscribe(
       (response)=>{
           console.log(response);
-          let blob:any = new Blob([response], {type: 'text/xml'});
+          let blob:any = new Blob([response], {type: response.body.type});
           const url = window.URL.createObjectURL(blob);
           // window.open(url)  -> this only works for certain file format 
           fileSaver.saveAs(blob, 'test.txt');

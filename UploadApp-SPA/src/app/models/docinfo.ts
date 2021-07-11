@@ -14,4 +14,5 @@ export class DocInfo {
     dateAgreed: Date;
     dateResent: Date;
     tags : Array<string>;
+    owners : Array<string>;
 }

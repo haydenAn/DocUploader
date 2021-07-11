@@ -15,6 +15,5 @@ namespace UploaderApp.API.Models
 
         public string EmailAddress { get; set; }
 
-        public ObjectId[] OwnedDocIds {get; set; } 
     }
 }

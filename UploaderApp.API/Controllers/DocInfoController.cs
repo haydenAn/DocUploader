@@ -29,6 +29,7 @@ namespace UploaderApp.API.Controllers
         public async Task<IActionResult> GetDocInfo([FromQuery] ReportParams rptParams) {
             
            PagedList<DocInfo> docs;
+
            if(rptParams.Keys == null && String.IsNullOrEmpty(rptParams.Keyword)){
               docs = await _docInfoService.GetDocInfo(rptParams);
            }
@@ -41,7 +42,6 @@ namespace UploaderApp.API.Controllers
            }
            return Ok(docs);
         }
-        ////for keyword searching only as
         
         [HttpPost]
         public IActionResult CreatDocInfo(DocInfo doc)
